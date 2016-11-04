@@ -1,0 +1,21 @@
+/**
+  Medium is a routing element
+  \color #22f
+  \symbol Me
+  \symmetries all
+
+  \author R. Stephens Summerlin
+
+  \license lgpl
+*/
+
+element Medium {
+
+    // Utilities
+    EventWindow ew;
+
+    Void behave() {
+        Medium m;
+        ew[1] = m;
+    }
+}
