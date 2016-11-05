@@ -2,20 +2,72 @@
   Medium is a routing element
   \color #22f
   \symbol Me
-  \symmetries all
+  \symmetries normal
 
   \author R. Stephens Summerlin
 
   \license lgpl
 */
 
-element Medium {
+element Medium
+{
+    // Types
+    typedef Int(16) Dist;
+    typedef EventWindow.SiteNum SiteNum;
 
     // Utilities
     EventWindow ew;
+    Dist dist;
 
-    Void behave() {
+    Void behave()
+    {
+        // Setup Distance variables
+        Dist mdist = dist;
+        Dist ldist = 0;
+        if(dist > 1)
+        {
+            ldist = (Dist) (dist -1);
+        }
+
+        // Create child to copy
         Medium m;
-        ew[1] = m;
+        m.dist = ldist;
+
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            // Set mdist to largest neig.dist - 1
+            Atom a = ew[(SiteNum) slot];
+            if(a is Medium)
+            {
+                Medium neig = (Medium) a;
+                if(neig.dist > mdist)
+                {
+                    mdist = (Dist) (neig.dist - 1);
+                }
+            }
+            // Propogate to empty
+            else if(a is Empty)
+            {
+                ew[(SiteNum) slot] = m;
+
+            }
+            else
+            {
+                // Do nothing
+            }
+        }
+
+        // If found larger dist, set to larger, otherwise decay
+        if(mdist > dist)
+        {
+            dist = mdist;
+        }
+        else
+        {
+            dist = ldist;
+        }
     }
 }
