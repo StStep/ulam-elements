@@ -1,0 +1,43 @@
+
+/**
+  Exciter is a routing element
+  \color #aa1
+  \symbol Ex
+  \symmetries normal
+
+  \author R. Stephens Summerlin
+
+  \license lgpl
+*/
+
+element Exciter
+{
+    // Types
+    typedef Medium.Dist Dist;
+    typedef EventWindow.SiteNum SiteNum;
+
+    // Utilities
+    EventWindow ew;
+
+    Void behave()
+    {
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            // Excite mediums by setting distance member
+            Atom a = ew[(SiteNum) slot];
+            if(a is Medium)
+            {
+                Medium neig = (Medium) a;
+                neig.dist = (Dist) 20;
+                ew[(SiteNum) slot] = neig;
+            }
+            else
+            {
+                // Do nothing
+            }
+        }
+    }
+}
