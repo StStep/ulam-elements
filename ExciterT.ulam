@@ -1,0 +1,89 @@
+/**
+ * An element that exists to add things to
+ * medium distMaps.
+ *
+ * \author R. Stephens Summerlin
+ * \license lgpl
+ */
+quark ExciterT(Unsigned k, Unsigned d)
+{
+    // Types
+    typedef Medium.Key Key;
+    typedef Medium.Dist Dist;
+    typedef EventWindow.SiteNum SiteNum;
+
+    // Utilities
+    EventWindow ew;
+
+    Void behave()
+    {
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            // Excite mediums by setting dist entry
+            Atom a = ew[(SiteNum) slot];
+            if(a is Medium)
+            {
+                Medium neig = (Medium) a;
+                neig.distMap.add((Key) k, (Dist) d);
+                ew[(SiteNum) slot] = neig;
+            }
+            else
+            {
+                // Do nothing
+            }
+        }
+    }
+}
+
+/**
+ * Exciter is a routing element
+ * \color #8a1
+ * \symbol XA
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ */
+element  ExciterA : ExciterT(1, 30) { }
+
+
+/**
+ * Exciter is a routing element
+ * \color #aa1
+ * \symbol XB
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ */
+element  ExciterB : ExciterT(2, 30) { }
+
+/**
+ * Exciter is a routing element
+ * \color #a81
+ * \symbol XC
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ */
+element  ExciterC : ExciterT(3, 30) { }
+
+/**
+ * Exciter is a routing element
+ * \color #881
+ * \symbol XD
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ */
+element  ExciterD : ExciterT(4, 30) { }
+
