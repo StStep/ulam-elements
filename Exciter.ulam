@@ -1,14 +1,14 @@
 
 /**
-  Exciter is a routing element
-  \color #aa1
-  \symbol Ex
-  \symmetries normal
-
-  \author R. Stephens Summerlin
-
-  \license lgpl
-*/
+ * Exciter is a routing element
+ * \color #aa1
+ * \symbol Ex
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ */
 
 element Exciter
 {
@@ -16,7 +16,7 @@ element Exciter
     typedef Medium.Key Key;
     typedef Medium.Dist Dist;
     typedef EventWindow.SiteNum SiteNum;
-    
+
     // Implementation Attributes
     constant Key key = 4;
     constant Dist dist = 26;
@@ -36,7 +36,7 @@ element Exciter
             if(a is Medium)
             {
                 Medium neig = (Medium) a;
-                neig.addDistEntry(key, dist);
+                neig.distMap.add(key, dist);
                 ew[(SiteNum) slot] = neig;
             }
             else

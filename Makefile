@@ -1,5 +1,5 @@
 default:
-	ulam Medium.ulam Exciter.ulam
+	ulam Map.ulam Medium.ulam Exciter.ulam
 
 .PHONY: run
 run:
