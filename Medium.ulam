@@ -7,6 +7,8 @@
   \author R. Stephens Summerlin
 
   \license lgpl
+
+  TODO Sort dict to make lookups faster
 */
 
 element Medium
@@ -42,7 +44,7 @@ element Medium
         Int emptyInd = -1;
         Int smallerInd = -1;
         Dist ldist = dist;
-        for(Int i; i < n; ++i)
+        for(Int i = 0; i < n; ++i)
         {
             // If match found
             if(key == mKeys[i])
@@ -97,7 +99,7 @@ element Medium
     Dist getEntry(Key key)
     {
         Dist ret = 0;
-        for(Int i; i < n; ++i)
+        for(Int i = 0; i < n; ++i)
         {
             // If match found
             if(key == mKeys[i])
@@ -116,37 +118,35 @@ element Medium
     Void behave()
     {
         // Setup Distance variables
-        Dist mdist = mDists[0];
-        Dist ldist = 0;
-        if(mDists[0] > 1)
-        {
-            ldist = (Dist) (mDists[0] -1);
-        }
-
-        // Create child to copy
-        Medium m;
-        m.mDists[0] = ldist;
+        Dists maxDists = mDists;
 
         // Loop through neighbors
         WindowServices ws;
         ws.reset(1,1);
         for(Int slot = ws.next(); slot >= 0; slot = ws.next())
         {
-            // Set mdist to largest neig.mDists[0] - 1
+            // Set maxDists for each key to largest neig.mDists
             Atom a = ew[(SiteNum) slot];
             if(a is Medium)
             {
                 Medium neig = (Medium) a;
-                if(neig.mDists[0] > mdist)
+                for(Int i = 0; i < n; ++i)
                 {
-                    mdist = (Dist) (neig.mDists[0] - 1);
+                    Key tmpK = mKeys[i];
+                    if(tmpK == 0)
+                        continue;
+                    Dist tmpD = neig.getEntry(tmpK);
+                    if(tmpD > maxDists[i])
+                    {
+                        maxDists[i] = tmpD;
+                    }
                 }
             }
             // Propogate to empty
             else if(a is Empty)
             {
+                Medium m;
                 ew[(SiteNum) slot] = m;
-
             }
             else
             {
@@ -154,14 +154,10 @@ element Medium
             }
         }
 
-        // If found larger mDists[0], set to larger, otherwise decay
-        if(mdist > mDists[0])
+        // Decay all, either prev or max from neighbor
+        for(Int i = 0; i < n; ++i)
         {
-            mDists[0] = mdist;
-        }
-        else
-        {
-            mDists[0] = ldist;
+            mDists[i] = (Dist) (maxDists[i] - 1);
         }
     }
 }

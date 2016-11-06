@@ -16,6 +16,10 @@ element Exciter
     typedef Medium.Key Key;
     typedef Medium.Dist Dist;
     typedef EventWindow.SiteNum SiteNum;
+    
+    // Implementation Attributes
+    constant Key key = 4;
+    constant Dist dist = 26;
 
     // Utilities
     EventWindow ew;
@@ -27,12 +31,12 @@ element Exciter
         ws.reset(1,1);
         for(Int slot = ws.next(); slot >= 0; slot = ws.next())
         {
-            // Excite mediums by setting distance member
+            // Excite mediums by setting dist entry
             Atom a = ew[(SiteNum) slot];
             if(a is Medium)
             {
                 Medium neig = (Medium) a;
-                neig.mDists[0] = (Dist) 20;
+                neig.addDistEntry(key, dist);
                 ew[(SiteNum) slot] = neig;
             }
             else
