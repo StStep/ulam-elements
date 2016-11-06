@@ -30,6 +30,89 @@ element Medium
     Keys mKeys;
     Dists mDists;
 
+    /**
+     * Add key-value pair to dictionary, using one of the following, in order:
+     *  (1) If key already exists, update it
+     *  (2) If not the dict is not full, add a new key
+     *  (3) If full, replace the smallest key-value it is larger than, if any
+     */
+    Void addDistEntry(Key key, Dist dist)
+    {
+        Int matchInd = -1;
+        Int emptyInd = -1;
+        Int smallerInd = -1;
+        Dist ldist = dist;
+        for(Int i; i < n; ++i)
+        {
+            // If match found
+            if(key == mKeys[i])
+            {
+                matchInd = i;
+                break;
+            }
+            // Elif Empty
+            else if((emptyInd < 0) && (mKeys[i] == 0))
+            {
+                emptyInd = i;
+            }
+            // Else non-matching key
+            else
+            {
+                if(mDists[i] < ldist)
+                {
+                    smallerInd = i;
+                    ldist = mDists[i];
+                }
+            }
+        }
+
+        // If match found
+        if(matchInd >= 0)
+        {
+            mKeys[matchInd] = key;
+            mDists[matchInd] = dist;
+        }
+        // Elif Not Full
+        else if(emptyInd >= 0)
+        {
+            mKeys[emptyInd] = key;
+            mDists[emptyInd] = dist;
+        }
+        // Elif Full, but smaller entry exists
+        else if(smallerInd >= 0)
+        {
+            mKeys[smallerInd] = key;
+            mDists[smallerInd] = dist;
+        }
+        // Else Full, and smaller than any existing entry
+        else
+        {
+            // Do nothing
+        }
+    }
+
+    /**
+     * Get the value for a given key, a value of 0 is returned when no key is found
+     */
+    Dist getEntry(Key key)
+    {
+        Dist ret = 0;
+        for(Int i; i < n; ++i)
+        {
+            // If match found
+            if(key == mKeys[i])
+            {
+                ret = mDists[i];
+                break;
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * Primary runtime logic
+     */
     Void behave()
     {
         // Setup Distance variables
