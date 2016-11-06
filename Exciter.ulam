@@ -13,6 +13,7 @@
 element Exciter
 {
     // Types
+    typedef Medium.Key Key;
     typedef Medium.Dist Dist;
     typedef EventWindow.SiteNum SiteNum;
 
@@ -31,7 +32,7 @@ element Exciter
             if(a is Medium)
             {
                 Medium neig = (Medium) a;
-                neig.dist = (Dist) 20;
+                neig.mDists[0] = (Dist) 20;
                 ew[(SiteNum) slot] = neig;
             }
             else

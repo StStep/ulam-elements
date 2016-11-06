@@ -11,41 +11,52 @@
 
 element Medium
 {
+    // Implementation Attributes
+    constant Unsigned k = 4;
+    constant Unsigned v = 6;
+    constant Unsigned n = 7;
+
     // Types
-    typedef Int(16) Dist;
+    typedef Unsigned(k) Key;
+    typedef Unsigned(v) Dist;
+    typedef Key Keys[n];
+    typedef Dist Dists[n];
     typedef EventWindow.SiteNum SiteNum;
 
     // Utilities
     EventWindow ew;
-    Dist dist;
+
+    // Data members
+    Keys mKeys;
+    Dists mDists;
 
     Void behave()
     {
         // Setup Distance variables
-        Dist mdist = dist;
+        Dist mdist = mDists[0];
         Dist ldist = 0;
-        if(dist > 1)
+        if(mDists[0] > 1)
         {
-            ldist = (Dist) (dist -1);
+            ldist = (Dist) (mDists[0] -1);
         }
 
         // Create child to copy
         Medium m;
-        m.dist = ldist;
+        m.mDists[0] = ldist;
 
         // Loop through neighbors
         WindowServices ws;
         ws.reset(1,1);
         for(Int slot = ws.next(); slot >= 0; slot = ws.next())
         {
-            // Set mdist to largest neig.dist - 1
+            // Set mdist to largest neig.mDists[0] - 1
             Atom a = ew[(SiteNum) slot];
             if(a is Medium)
             {
                 Medium neig = (Medium) a;
-                if(neig.dist > mdist)
+                if(neig.mDists[0] > mdist)
                 {
-                    mdist = (Dist) (neig.dist - 1);
+                    mdist = (Dist) (neig.mDists[0] - 1);
                 }
             }
             // Propogate to empty
@@ -60,14 +71,14 @@ element Medium
             }
         }
 
-        // If found larger dist, set to larger, otherwise decay
-        if(mdist > dist)
+        // If found larger mDists[0], set to larger, otherwise decay
+        if(mdist > mDists[0])
         {
-            dist = mdist;
+            mDists[0] = mdist;
         }
         else
         {
-            dist = ldist;
+            mDists[0] = ldist;
         }
     }
 }
