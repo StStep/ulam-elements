@@ -14,11 +14,28 @@ element Molt
 {
     // Types
     typedef EventWindow.SiteNum SiteNum;
+    typedef Unsigned(2) State;
+    typedef Unsigned(16) Gen;
 
     // Utilities
     EventWindow ew;
 
+    // Constants
+    constant State inactive = 0;
+    constant State active = 1;
+    constant State dead = 3;
+    constant Gen maxGen = 20;
+
     // Data members
+    State state;
+    Gen curGen;
+
+    Molt propogate()
+    {
+        Molt m = self;
+        ++m.curGen;
+        return m;
+    }
 
     /**
      * Primary runtime logic
@@ -34,8 +51,10 @@ element Molt
             // If Empty, propogate
             if(a is Empty)
             {
-                Molt m;
-                ew[(SiteNum) slot] = m;
+                if(curGen < maxGen)
+                {
+                    ew[(SiteNum) slot] = propogate();
+                }
             }
             // Else
             else
