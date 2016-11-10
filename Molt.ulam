@@ -1,0 +1,47 @@
+/**
+ * Molt is a size management element.
+ * \color #f22
+ * \symbol Mo
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ *
+ */
+
+element Molt
+{
+    // Types
+    typedef EventWindow.SiteNum SiteNum;
+
+    // Utilities
+    EventWindow ew;
+
+    // Data members
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            Atom a = ew[(SiteNum) slot];
+            // If Empty, propogate
+            if(a is Empty)
+            {
+                Molt m;
+                ew[(SiteNum) slot] = m;
+            }
+            // Else
+            else
+            {
+                // Do nothing
+            }
+        }
+    }
+}
