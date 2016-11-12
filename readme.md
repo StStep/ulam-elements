@@ -73,10 +73,11 @@ Expands outwards, allocating a semi-regular size hunk of space.
 This element is used to allocate or reserve an adjustable amount of space by copying itself into it.
 Ideally, this could be used as a mechanism for the reservation as a calculation space, and a way to seperate the calculation space from 'outside.'
 The size can currently be adjusted by the maxGen model parameter.
+Molts do not have any inherent centring abilities, so the space filled is entirely based on maxGen and the initial placement.
 
 ### Future Work
 * Add a cleanup of internal elements to make room for calculations
 * Allow for the outer layer to maintain itself, rather than becoming dead and intert.
 * Synchonize the molt generations, to lead to a more regular growth pattern
-* Determine how to handle enclosed molts? Will leave gaps if initial molt element is not centered.
+* Smooth outside edges, have protusions erase themselves
 
