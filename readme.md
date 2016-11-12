@@ -53,24 +53,26 @@ Adds the key-value pair K-V to all adjacent medium elements, leading to the key 
 ### Details
 This function exercises the Medium distMap member.
 
-Molt
+Molt and MoltChild
 --
-Expands outwards, allocating a semi-regular size hunk of space.
+Expands outwards, allocating a regular sized diamond hunk of space.
 
 ### Members
 * state: inactive(0), active(1), or dead(3)
 * curGen: The generation of the molt
+* sym: The symmetry of the element
+* isCardinal: True of the element makes up the cardinal cross of the diamond, essentially a corner of the diamond.
 
 ### Model Parameters
 * maxGen: The oldest generation that can exist, but cannot propogate
 
 ### Logic
-* Inactive while other adjacent molts are active
-* Once active, propogate inactive molts with curGen++ and then die
+* Inactive while upper and lower neigbor spots are empty
+* Once active, propogate inactive molts with curGen++ into upper and lower child locations and then die
 * Once dead, do nothin
 
 ### Details
-This element is used to allocate or reserve an adjustable amount of space by copying itself into it.
+Molt is used to allocate or reserve an adjustable amount of space by copying MoltChild's adjacent to it.
 Ideally, this could be used as a mechanism for the reservation as a calculation space, and a way to seperate the calculation space from 'outside.'
 The size can currently be adjusted by the maxGen model parameter.
 Molts do not have any inherent centring abilities, so the space filled is entirely based on maxGen and the initial placement.
@@ -78,6 +80,4 @@ Molts do not have any inherent centring abilities, so the space filled is entire
 ### Future Work
 * Add a cleanup of internal elements to make room for calculations
 * Allow for the outer layer to maintain itself, rather than becoming dead and intert.
-* Synchonize the molt generations, to lead to a more regular growth pattern
-* Smooth outside edges, have protusions erase themselves
 
