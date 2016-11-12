@@ -16,6 +16,7 @@ element Molt
     typedef EventWindow.SiteNum SiteNum;
     typedef Unsigned(2) State;
     typedef Unsigned(6) Gen;
+    typedef Unsigned(8) AGRB[4];
 
     // Utilities
     EventWindow ew;
@@ -34,6 +35,29 @@ element Molt
     // Data members
     State state;
     Gen curGen;
+
+    /**
+     * Used to determine the display color
+     */
+    ARGB getColor(Unsigned selector)
+    {
+        ColorUtils cu;
+        ARGB ret;
+        if(state == inactive)
+        {
+            ret = cu.color(0x7F,2,2);
+        }
+        else if(state == active)
+        {
+            ret = cu.color(0xFF,2,2);
+        }
+        else // dead
+        {
+            ret = cu.color(0x3F,2,2);
+        }
+
+        return ret;
+    }
 
     /**
      * Copy self, incerementing generation and resetting state
