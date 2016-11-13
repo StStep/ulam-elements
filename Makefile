@@ -1,5 +1,5 @@
 default:
-	ulam Map.ulam Medium.ulam ExciterT.ulam Molt.ulam
+	ulam Map.ulam Medium.ulam ExciterT.ulam Barrier.ulam Molt.ulam
 
 .PHONY: run
 run:

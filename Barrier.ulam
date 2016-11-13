@@ -1,0 +1,97 @@
+/**
+ * Barrier is a shape maintenance element.
+ * \color #f66
+ * \symbol Ba
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ *
+ */
+element Barrier
+{
+
+    // Types
+    typedef EventWindow.SiteNum SiteNum;
+
+    // Utilities
+    EventWindow ew;
+
+    // Data members
+    SiteNum friend_u;
+    SiteNum friend_uu;
+    SiteNum friend_l;
+    SiteNum friend_ll;
+
+    SiteNum flipPersp(SiteNum site)
+    {
+        if(site == 2)
+            return 3;
+        if(site == 3)
+            return 2;
+        if(site == 1)
+            return 4;
+        if(site == 4)
+            return 1;
+        if(site == 5)
+            return 8;
+        if(site == 8)
+            return 5;
+        if(site == 7)
+            return 6;
+        if(site == 6)
+            return 7;
+
+        return 0;
+    }
+
+    /**
+     * The logic that maintains the existance
+     * of friends.
+     */
+    Void verifyFriends()
+    {
+        Barrier b;
+
+        // Check upper friend
+        if(friend_u != 0)
+        {
+            Atom a_u = ew[friend_u];
+            if(a_u is Barrier)
+            {
+                b = (Barrier) a_u;
+                if(friend_uu == 0)
+                    friend_uu = b.friend_u;
+            }
+            b.friend_l = flipPersp(friend_u);
+            if(friend_uu != 0)
+                b.friend_u = friend_uu;
+            ew[friend_u] = b;
+        }
+
+        // Check lower friend
+        if(friend_l != 0)
+        {
+            Atom a_l = ew[friend_l];
+            if(a_l is Barrier)
+            {
+                b = (Barrier) a_l;
+                if(friend_ll == 0)
+                    friend_ll = b.friend_l;
+            }
+            b.friend_u = flipPersp(friend_l);
+            if(friend_ll != 0)
+                b.friend_l = friend_ll;
+            ew[friend_l] = b;
+        }
+    }
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        verifyFriends();
+    }
+}
