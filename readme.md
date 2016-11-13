@@ -78,8 +78,7 @@ The size can currently be adjusted by the maxGen model parameter.
 Molts do not have any inherent centring abilities, so the space filled is entirely based on maxGen and the initial placement.
 
 ### Future Work
-* Add a cleanup of internal elements to make room for calculations
-* Allow for the outer layer to maintain itself, rather than becoming dead and intert.
+* Allow for the outer layer to maintain itself, rather than becoming dead and intert (Become barrier element)
 * Better encapsulate internal inconsistancies
 * Handle growth interruptsion better??
 

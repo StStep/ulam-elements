@@ -16,6 +16,9 @@ element Medium
     typedef Map.Key Key;
     typedef Map.Value Dist;
     typedef EventWindow.SiteNum SiteNum;
+    typedef MoltChild.State State;
+
+    constant State dead = 2;
 
     // Utilities
     EventWindow ew;
@@ -43,11 +46,15 @@ element Medium
                 Medium neig = (Medium) a;
                 tmpMap.setMax(neig.distMap);
             }
-            // If Empty, propogate
-            else if(a is Empty)
+            // If Dead Molt, propogate
+            else if(a is MoltChild)
             {
-                Medium m;
-                ew[(SiteNum) slot] = m;
+                MoltChild child = (MoltChild) a;
+                if(child.state == dead)
+                {
+                    Medium m;
+                    ew[(SiteNum) slot] = m;
+                }
             }
             // Else
             else
