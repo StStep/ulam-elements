@@ -158,21 +158,45 @@ element MoltChild
      */
     State tDead()
     {
-        MoltChild m_u;
-        MoltChild m_l;
+        MoltChild m;
+        Bool upperDead = false;
+        Bool lowerDead = false;
+        SiteNum lower = lowerPeer;
+        if(isCardinal)
+            lower = lowerCardinalPeer;
 
-        Atom a_u = ew[upperChild];
-        Atom a_l = ew[lowerChild];
-        if((a_u is MoltChild) && (a_l is MoltChild))
+        Atom a_u = ew[upperPeer];
+        if(a_u is MoltChild)
         {
-            m_u = (MoltChild) a_u;
-            m_l = (MoltChild) a_l;
-            if((m_u.state == dead) && (m_l.state == dead))
+            m = (MoltChild) a_u;
+            if(m.state == dead)
             {
-                Empty e;
-                ew[0] = e;
+                upperDead = true;
             }
+        }
+        else
+        {
+           upperDead = true;
+        }
 
+        Atom a_l = ew[lower];
+        if(a_l is MoltChild)
+        {
+            m = (MoltChild) a_l;
+            if(m.state == dead)
+            {
+                lowerDead = true;
+            }
+        }
+        else
+        {
+           lowerDead = true;
+        }
+
+        if((upperDead) && (lowerDead))
+        {
+            Empty e;
+            ew[0] = e;
         }
 
         return dead;
@@ -284,5 +308,7 @@ element Molt
         {
             propogate();
         }
+        Empty e;
+        ew[0] = e;
     }
 }
