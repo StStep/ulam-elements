@@ -22,8 +22,9 @@ element MoltChild
 
     // Constants
     constant State inactive = 0;
-    constant State active = 2;
-    constant State dead = 3;
+    constant State active = 1;
+    constant State dead = 2;
+    constant State ascend = 3;
     constant SiteNum upperPeer = 7;
     constant SiteNum lowerPeer = 6;
     constant SiteNum lowerCardinalPeer = 8;
@@ -56,6 +57,10 @@ element MoltChild
         else if(state == active)
         {
             ret = cu.color(0xFF,2,2);
+        }
+        else if(state == ascend)
+        {
+            ret = cu.color(0x30,0x70,2);
         }
         else // dead
         {
@@ -99,17 +104,26 @@ element MoltChild
     {
         if(curGen >= maxGen)
         {
-            return dead;
+            return ascend;
         }
 
         MoltChild m;
         m.curGen = (Gen) (curGen + 1);
         m.sym = sym;
+        Bool willAscend = false;
 
         Atom a_u = ew[upperChild];
         if(a_u is Empty)
         {
             ew[upperChild] = m;
+        }
+        else if(a_u is MoltChild)
+        {
+            // Do nothing
+        }
+        else
+        {
+            willAscend = true;
         }
 
         Atom a_l = ew[lowerChild];
@@ -118,18 +132,43 @@ element MoltChild
             m.isCardinal = isCardinal;
             ew[lowerChild] = m;
         }
+        else if(a_l is MoltChild)
+        {
+            // Do nothing
+        }
+        else
+        {
+            willAscend = true;
+        }
 
-        return dead;
+        if(willAscend)
+        {
+            return ascend;
+        }
+        else
+        {
+            return dead;
+        }
     }
 
     /**
      * Handle dead state.
      *
-     * Stay dead.
+     * Be dead.
      */
     State tDead()
     {
         return dead;
+    }
+
+    /**
+     * Handle ascend state.
+     *
+     * Ascend into a barrier.
+     */
+    State tAscend()
+    {
+        return ascend;
     }
 
     /**
@@ -148,6 +187,10 @@ element MoltChild
         else if(state == active)
         {
             next = tActive();
+        }
+        else if(state == ascend)
+        {
+            next = tAscend();
         }
         // Else dead
         else

@@ -80,4 +80,6 @@ Molts do not have any inherent centring abilities, so the space filled is entire
 ### Future Work
 * Add a cleanup of internal elements to make room for calculations
 * Allow for the outer layer to maintain itself, rather than becoming dead and intert.
+* Better encapsulate internal inconsistancies
+* Handle growth interruptsion better??
 
