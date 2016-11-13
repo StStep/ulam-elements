@@ -154,10 +154,27 @@ element MoltChild
     /**
      * Handle dead state.
      *
-     * Be dead.
+     * Be become Empty once children are dead
      */
     State tDead()
     {
+        MoltChild m_u;
+        MoltChild m_l;
+
+        Atom a_u = ew[upperChild];
+        Atom a_l = ew[lowerChild];
+        if((a_u is MoltChild) && (a_l is MoltChild))
+        {
+            m_u = (MoltChild) a_u;
+            m_l = (MoltChild) a_l;
+            if((m_u.state == dead) && (m_l.state == dead))
+            {
+                Empty e;
+                ew[0] = e;
+            }
+
+        }
+
         return dead;
     }
 
