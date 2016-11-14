@@ -81,11 +81,6 @@ Ideally, this could be used as a mechanism for the reservation as a calculation 
 The size can currently be adjusted by the maxGen model parameter.
 Molts do not have any inherent centring abilities, so the space filled is entirely based on maxGen and the initial placement.
 
-### Future Work
-* Allow for the outer layer to maintain itself, rather than becoming dead and intert (Become barrier element)
-* Better encapsulate internal inconsistancies
-* Handle growth interruptsion better??
-
 
 Barrier
 --
@@ -98,3 +93,10 @@ Acts as buffer to 'unsafe' sites.
 What is determine safe has a large effect on how barriers and medium interact.
 If Empty is unsafe, then erased portions seperate out into their own barriers
 If Empty is safe, then barriers and medium always propogate out on erasures to maintain a square.
+
+
+
+Future Work
+==
+* Handle Molt growth interruptions better??
+
