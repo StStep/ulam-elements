@@ -27,6 +27,7 @@ element Barrier
         WindowServices ws;
         ws.reset(1,1);
         Unsigned(3) safeNeig = 0;
+        Unsigned(3) badNeig = 0;
         for(Int slot = ws.next(); slot >= 0; slot = ws.next())
         {
             // If Medium neigbor, calc max dist for distMap
@@ -37,12 +38,12 @@ element Barrier
             }
             else
             {
-                // Do nothing
+                ++badNeig;
             }
         }
 
-        // Disolve if more than 2 medium neighbors
-        if(safeNeig > 2)
+        // Disolve if no bad neigbors
+        if(badNeig == 0)
         {
             Medium m;
             ew[0] = m;
