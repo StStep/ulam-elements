@@ -56,10 +56,21 @@ element Medium
                     ew[(SiteNum) slot] = m;
                 }
             }
-            // Else
-            else
+            // If empty, make barrier
+            else if(a is Empty)
+            {
+                Barrier b;
+                ew[(SiteNum) slot] = b;
+            }
+            else if(a is Barrier)
             {
                 // Do nothing
+            }
+            // Else become barriar if unknown
+            else
+            {
+                Barrier b;
+                ew[0] = b;
             }
         }
 

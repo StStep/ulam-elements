@@ -117,7 +117,7 @@ element MoltChild
         {
             ew[upperChild] = m;
         }
-        else if((a_u is MoltChild) || (a_u is Medium))
+        else if((a_u is MoltChild) || (a_u is Medium) || (a_u is Barrier))
         {
             // Do nothing
         }
@@ -132,7 +132,7 @@ element MoltChild
             m.isCardinal = isCardinal;
             ew[lowerChild] = m;
         }
-        else if((a_l is MoltChild) || (a_l is Medium))
+        else if((a_l is MoltChild) || (a_l is Medium) || (a_l is Barrier))
         {
             // Do nothing
         }
@@ -168,6 +168,8 @@ element MoltChild
      */
     State tAscend()
     {
+        Barrier b;
+        ew[0] = b;
         return ascend;
     }
 
