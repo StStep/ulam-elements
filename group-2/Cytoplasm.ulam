@@ -1,0 +1,113 @@
+/**
+ * Cytoplasm is a size management element
+ * \color #22f
+ * \symbol Cy
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ *
+ */
+
+element Cytoplasm
+{
+    // Types
+    typedef Nucleus.ID ID;
+    typedef Nucleus.Dist Dist;
+    typedef EventWindow.SiteNum SiteNum;
+
+    // Utilities
+    EventWindow ew;
+
+    // Data members
+    ID id;
+    Dist dist;
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        // Setup temp map
+        Dist max = dist;
+
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            Atom a = ew[(SiteNum) slot];
+
+            // If friendly Cyto neigbor, calc max dist, otherwise membrane
+            if(a is Cytoplasm)
+            {
+                Cytoplasm neig = (Cytoplasm) a;
+                if(neig.id != id)
+                {
+                    Membrane m;
+                    m.id = id;
+                    ew[0] = m;
+                }
+                else
+                {
+                    if(neig.dist > max)
+                    {
+                        max - neig.dist;
+                    }
+                }
+            }
+            // If empty and not on distance edge, make cyto, otherwise membrane
+            else if(a is Empty)
+            {
+                if(dist > 0)
+                {
+                    Cytoplasm c;
+                    c.id = id;
+                    c.dist = (Dist) (dist - 1);
+                    ew[(SiteNum) slot] = c;
+                }
+                else
+                {
+                    Membrane m;
+                    m.id = id;
+                    ew[(SiteNum) slot] = m;
+                }
+            }
+            // If friendly membrane, do nothing otherwise become membrane
+            else if(a is Membrane)
+            {
+                Membrane neig = (Membrane) a;
+                // Become membrane if unfriendly neighbor
+                if(neig.id != id)
+                {
+                    Membrane m;
+                    m.id = id;
+                    ew[0] = m;
+                }
+            }
+            // Else become membrane if unknown
+            else
+            {
+                Membrane m;
+                m.id = id;
+                ew[0] = m;
+            }
+        }
+
+        // Decay and set
+        --max;
+
+        // Die when dist 0
+        if(max == 0)
+        {
+            Empty e;
+            ew[0] = e;
+        }
+        else
+        {
+            dist = max;
+        }
+
+    }
+}

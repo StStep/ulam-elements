@@ -1,0 +1,56 @@
+/**
+ * Nucleus is a size management element.
+ * \color #f22
+ * \symbol Nu
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ * \license lgpl
+ */
+element Nucleus
+{
+    // Types
+    typedef Unsigned(6) ID;
+    typedef Unsigned(6) Dist;
+    typedef EventWindow.SiteNum SiteNum;
+    typedef EventWindow.Symmetry Symmetry;
+
+    // Utilities
+    EventWindow ew;
+
+    // Constants
+    constant ID id = 1;
+
+    // Model Parameters
+    /**
+     * Determines the size
+     */
+    parameter Dist maxDist = 8;
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            // If Cytoplasm or empty, excite
+            Atom a = ew[(SiteNum) slot];
+            if((a is Cytoplasm) || (a is Empty))
+            {
+                Cytoplasm c;
+                c.id = id;
+                c.dist = maxDist;
+                ew[(SiteNum) slot] = c;
+            }
+            // Else do nothing if unknown
+            else
+            {
+                // Do nothing
+            }
+        }
+    }
+}

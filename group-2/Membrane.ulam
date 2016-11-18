@@ -1,0 +1,78 @@
+/**
+ * Membrane is a size management element.
+ * \color #f66
+ * \symbol Me
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ *
+ */
+element Membrane
+{
+
+    // Types
+    typedef Nucleus.ID ID;
+    typedef Nucleus.Dist Dist;
+    typedef EventWindow.SiteNum SiteNum;
+
+    // Utilities
+    EventWindow ew;
+
+    // Data members
+    ID id;
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        Unsigned(3) badNeig = 0;
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            Atom a = ew[(SiteNum) slot];
+
+            // Count unfriendly neigbors
+            if(a is Cytoplasm)
+            {
+                Cytoplasm neig = (Cytoplasm) a;
+                if(neig.id != id)
+                {
+                    ++badNeig;
+                    break;
+                }
+            }
+            else if(a is Empty)
+            {
+                // Hmm TODO
+            }
+            else if(a is Membrane)
+            {
+                Membrane neig = (Membrane) a;
+                if(neig.id != id)
+                {
+                    ++badNeig;
+                    break;
+                }
+            }
+            else
+            {
+                ++badNeig;
+                break;
+            }
+        }
+
+        // Disolve if no bad neigbors
+        if(badNeig == 0)
+        {
+            Cytoplasm c;
+            c.id = id;
+            c.dist = 0;
+            ew[0] = c;
+        }
+    }
+}
