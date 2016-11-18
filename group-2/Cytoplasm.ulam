@@ -45,9 +45,9 @@ element Cytoplasm
                 Cytoplasm neig = (Cytoplasm) a;
                 if(neig.id != id)
                 {
-                    Membrane m;
-                    m.id = id;
-                    ew[0] = m;
+                    //Membrane m;
+                    //m.id = id;
+                    //ew[0] = m;
                 }
                 else
                 {
@@ -69,9 +69,9 @@ element Cytoplasm
                 }
                 else
                 {
-                    Membrane m;
-                    m.id = id;
-                    ew[(SiteNum) slot] = m;
+                    //Membrane m;
+                    //m.id = id;
+                    //ew[(SiteNum) slot] = m;
                 }
             }
             // If friendly membrane, do nothing otherwise become membrane
@@ -81,17 +81,17 @@ element Cytoplasm
                 // Become membrane if unfriendly neighbor
                 if(neig.id != id)
                 {
-                    Membrane m;
-                    m.id = id;
-                    ew[0] = m;
+                    //Membrane m;
+                    //m.id = id;
+                    //ew[0] = m;
                 }
             }
             // Else become membrane if unknown
             else
             {
-                Membrane m;
-                m.id = id;
-                ew[0] = m;
+                //Membrane m;
+                //m.id = id;
+                //ew[0] = m;
             }
         }
 

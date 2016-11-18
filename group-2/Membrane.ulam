@@ -28,6 +28,7 @@ element Membrane
      */
     Void behave()
     {
+/*
         // Loop through neighbors
         WindowServices ws;
         ws.reset(1,1);
@@ -49,6 +50,7 @@ element Membrane
             else if(a is Empty)
             {
                 // Hmm TODO
+                ++badNeig;
             }
             else if(a is Membrane)
             {
@@ -74,5 +76,6 @@ element Membrane
             c.dist = 0;
             ew[0] = c;
         }
+*/
     }
 }
