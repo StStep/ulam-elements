@@ -1,6 +1,6 @@
 /**
  * Nucleus is a size management element.
- * \color #f22
+ * \color #f29
  * \symbol Nu
  * \symmetries normal
  *
@@ -18,14 +18,14 @@ element Nucleus
     // Utilities
     EventWindow ew;
 
-    // Constants
-    constant ID id = 1;
-
     // Model Parameters
     /**
      * Determines the size
      */
     parameter Dist maxDist = 8;
+
+    // Data members
+    ID id = 1;
 
     /**
      * Primary runtime logic
@@ -52,5 +52,55 @@ element Nucleus
                 // Do nothing
             }
         }
+    }
+}
+
+/**
+ * Nucleus ID variation enabler
+ * \color #2f2
+ * \symbol Nu
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ * \license lgpl
+ */
+element NucleusB
+{
+    // Utilities
+    EventWindow ew;
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        Nucleus n;
+        n.id = 2;
+        ew[0] = n;
+    }
+}
+
+/**
+ * Nucleus ID variation enabler
+ * \color #ff2
+ * \symbol Nu
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ * \license lgpl
+ */
+element NucleusC
+{
+    // Utilities
+    EventWindow ew;
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        Nucleus n;
+        n.id = 3;
+        ew[0] = n;
     }
 }
