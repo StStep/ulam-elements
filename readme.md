@@ -98,5 +98,7 @@ If Empty is safe, then barriers and medium always propogate out on erasures to m
 
 Future Work
 ==
-* Handle Molt growth interruptions better??
+
+* Make Membrane edges more solid
+* Make nucleus diffusable
 
