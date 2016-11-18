@@ -24,6 +24,13 @@ element Cytoplasm
     ID id;
     Dist dist;
 
+    Void harden()
+    {
+        Membrane m;
+        m.id = id;
+        ew[0] = m;
+    }
+
     /**
      * Primary runtime logic
      */
@@ -45,33 +52,25 @@ element Cytoplasm
                 Cytoplasm neig = (Cytoplasm) a;
                 if(neig.id != id)
                 {
-                    //Membrane m;
-                    //m.id = id;
-                    //ew[0] = m;
+                    harden();
                 }
                 else
                 {
                     if(neig.dist > max)
                     {
-                        max - neig.dist;
+                        max = neig.dist;
                     }
                 }
             }
-            // If empty and not on distance edge, make cyto, otherwise membrane
+            // If empty and not on distance edge, make cyto
             else if(a is Empty)
             {
-                if(dist > 0)
+                if(dist > 1)
                 {
                     Cytoplasm c;
                     c.id = id;
                     c.dist = (Dist) (dist - 1);
                     ew[(SiteNum) slot] = c;
-                }
-                else
-                {
-                    //Membrane m;
-                    //m.id = id;
-                    //ew[(SiteNum) slot] = m;
                 }
             }
             // If friendly membrane, do nothing otherwise become membrane
@@ -81,28 +80,31 @@ element Cytoplasm
                 // Become membrane if unfriendly neighbor
                 if(neig.id != id)
                 {
-                    //Membrane m;
-                    //m.id = id;
-                    //ew[0] = m;
+                    harden();
+                }
+            }
+            else if(a is Nucleus)
+            {
+                Nucleus neig = (Nucleus) a;
+                if(neig.id != id)
+                {
+                    harden();
                 }
             }
             // Else become membrane if unknown
             else
             {
-                //Membrane m;
-                //m.id = id;
-                //ew[0] = m;
+                harden();
             }
         }
 
         // Decay and set
         --max;
 
-        // Die when dist 0
-        if(max == 0)
+        // Harden when dist less than 2
+        if(max < 2)
         {
-            Empty e;
-            ew[0] = e;
+            harden();
         }
         else
         {

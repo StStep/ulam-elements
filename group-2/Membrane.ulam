@@ -28,11 +28,11 @@ element Membrane
      */
     Void behave()
     {
-/*
         // Loop through neighbors
         WindowServices ws;
         ws.reset(1,1);
-        Unsigned(3) badNeig = 0;
+        Bool badNeig = false;
+        Bool goodNeig = false;
         for(Int slot = ws.next(); slot >= 0; slot = ws.next())
         {
             Atom a = ew[(SiteNum) slot];
@@ -43,39 +43,48 @@ element Membrane
                 Cytoplasm neig = (Cytoplasm) a;
                 if(neig.id != id)
                 {
-                    ++badNeig;
-                    break;
+                    badNeig = true;
+                }
+                else
+                {
+                    goodNeig = true;
                 }
             }
             else if(a is Empty)
             {
                 // Hmm TODO
-                ++badNeig;
             }
             else if(a is Membrane)
             {
                 Membrane neig = (Membrane) a;
                 if(neig.id != id)
                 {
-                    ++badNeig;
-                    break;
+                    badNeig = true;
                 }
             }
             else
             {
-                ++badNeig;
-                break;
+                badNeig = true;
             }
         }
 
-        // Disolve if no bad neigbors
-        if(badNeig == 0)
+        // Die if no friends
+        if(!goodNeig)
+        {
+            Empty e;
+            ew[0] = e;
+        }
+        // Else disolve if no bad neigbors
+        else if(!badNeig)
         {
             Cytoplasm c;
             c.id = id;
             c.dist = 0;
             ew[0] = c;
         }
-*/
+        else
+        {
+            // Do nothing
+        }
     }
 }
