@@ -58,15 +58,10 @@ element Nucleus
                     swap = true;
                 }
             }
-            // Die if unfriendly medium
+            // Count surrounding membranes
             else if(a is Membrane)
             {
                 ++memNeig;
-                Membrane neig = (Membrane) a;
-                if(neig.id != id)
-                {
-                    die();
-                }
             }
             // If Nucleus do nothing
             else if(a is Nucleus)

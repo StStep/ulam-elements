@@ -27,7 +27,6 @@ element Cytoplasm
     Void harden()
     {
         Membrane m;
-        m.id = id;
         ew[0] = m;
     }
 
@@ -79,15 +78,16 @@ element Cytoplasm
                     ew[(SiteNum) slot] = c;
                 }
             }
-            // If friendly membrane, do nothing otherwise become membrane
+            // If membrane, suggest movement
             else if(a is Membrane)
             {
-                Membrane neig = (Membrane) a;
-                // Become membrane if unfriendly neighbor
-                if(neig.id != id)
+                if(dist > 2)
                 {
-                    harden();
+                    Membrane neig = (Membrane) a;
+                    neig.moveDir = (SiteNum) slot;
+                    ew[(SiteNum) slot] = neig;
                 }
+
             }
             else if(a is Nucleus)
             {

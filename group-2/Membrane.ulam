@@ -21,7 +21,7 @@ element Membrane
     EventWindow ew;
 
     // Data members
-    ID id;
+    SiteNum moveDir;
 
     Void die()
     {
@@ -29,7 +29,7 @@ element Membrane
         ew[0] = e;
     }
 
-    Void dissolve()
+    Void dissolve(ID id)
     {
         Cytoplasm c;
         c.id = id;
@@ -47,15 +47,28 @@ element Membrane
         ws.reset(1,1);
         Bool badNeig = false;
         Bool goodNeig = false;
+        Bool swap = false;
+        ID lastId = 0;
         for(Int slot = ws.next(); slot >= 0; slot = ws.next())
         {
             Atom a = ew[(SiteNum) slot];
 
-            // Count unfriendly neigbors
+            // Check for unfriendly neighbors
             if(a is Cytoplasm)
             {
+                if(((SiteNum) slot) == moveDir)
+                {
+                    swap = true;
+                }
+
                 Cytoplasm neig = (Cytoplasm) a;
-                if(neig.id != id)
+                // First neig with ID
+                if(lastId == 0)
+                {
+                    lastId = neig.id;
+                    goodNeig = true;
+                }
+                else if(lastId != neig.id)
                 {
                     badNeig = true;
                 }
@@ -66,20 +79,26 @@ element Membrane
             }
             else if(a is Empty)
             {
-                // Hmm TODO
+                if(((SiteNum) slot) == moveDir)
+                {
+                    swap = true;
+                }
+                badNeig = true;
             }
             else if(a is Membrane)
             {
-                Membrane neig = (Membrane) a;
-                if(neig.id != id)
-                {
-                    badNeig = true;
-                }
+                // Do nothing
             }
             else if(a is Nucleus)
             {
                 Nucleus neig = (Nucleus) a;
-                if(neig.id != id)
+                // First neig with ID
+                if(lastId == 0)
+                {
+                    lastId = neig.id;
+                    goodNeig = true;
+                }
+                else if(lastId != neig.id)
                 {
                     badNeig = true;
                 }
@@ -102,7 +121,12 @@ element Membrane
         // Else disolve if no bad neigbors
         else if(!badNeig)
         {
-            dissolve();
+            dissolve(lastId);
+        }
+        else if(swap)
+        {
+            //ew.swap(0, moveDir);
+            moveDir = 0;
         }
         else
         {
