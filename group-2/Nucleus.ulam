@@ -75,8 +75,8 @@ element Nucleus
             }
         }
 
-        // Only move if no membrane
-        if(memNeig == 0)
+        // Only move if two or more  membrane
+        if(memNeig < 2)
         {
             ew.swap(0, 1);
         }
