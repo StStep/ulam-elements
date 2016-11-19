@@ -12,8 +12,10 @@ element Nucleus
     // Types
     typedef Unsigned(6) ID;
     typedef Unsigned(6) Dist;
+    typedef Unsigned(6) Timer;
     typedef EventWindow.SiteNum SiteNum;
     typedef EventWindow.Symmetry Symmetry;
+    typedef Cytoplasm.FlipTimeout FlipTimeout;
 
     // Utilities
     EventWindow ew;
@@ -26,6 +28,8 @@ element Nucleus
 
     // Data members
     ID id = 1;
+    Bool state;
+    Timer pulseTimer;
 
     Void die()
     {
@@ -33,11 +37,27 @@ element Nucleus
         ew[0] = e;
     }
 
+    Bool pulse()
+    {
+
+        ++pulseTimer;
+        Bool ret = (pulseTimer == Timer.maxof);
+        if(ret)
+        {
+            pulseTimer = 0;
+            state = !state;
+        }
+
+        return ret;
+    }
+
     /**
      * Primary runtime logic
      */
     Void behave()
     {
+        Bool flipNeig = pulse();
+
         // Loop through neighbors
         WindowServices ws;
         ws.reset(1,1);
@@ -52,6 +72,9 @@ element Nucleus
                 Cytoplasm c;
                 c.id = id;
                 c.dist = maxDist;
+                c.flip = flipNeig;
+                c.timeout = FlipTimeout.maxof;
+                c.state = state;
                 ew[(SiteNum) slot] = c;
                 if(slot == 1)
                 {

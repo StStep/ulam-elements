@@ -16,6 +16,7 @@ element Cytoplasm
     typedef Nucleus.ID ID;
     typedef Nucleus.Dist Dist;
     typedef EventWindow.SiteNum SiteNum;
+    typedef Unsigned(4) FlipTimeout;
 
     // Utilities
     EventWindow ew;
@@ -23,6 +24,9 @@ element Cytoplasm
     // Data members
     ID id;
     Dist dist;
+    Bool flip;
+    Bool state;
+    FlipTimeout timeout;
 
     Void harden()
     {
@@ -37,12 +41,46 @@ element Cytoplasm
     }
 
     /**
+     * Used to determine the display color
+     */
+    ARGB getColor(Unsigned selector)
+    {
+        ColorUtils cu;
+        ARGB ret;
+        if(state)
+        {
+            ret = cu.color(2,2,0x8F);
+        }
+        else
+        {
+            ret = cu.color(2,2,0x1F);
+        }
+
+        return ret;
+    }
+
+    Bool isTimedouted()
+    {
+        ++timeout;
+        return (timeout == FlipTimeout.maxof);
+    }
+
+    /**
      * Primary runtime logic
      */
     Void behave()
     {
         // Setup temp map
         Dist max = dist;
+        Bool flipNeig = false;
+
+        if(isTimedouted() && flip)
+        {
+            flip = false;
+            state = !state;
+            flipNeig = true;
+            timeout = 0;
+        }
 
         // Loop through neighbors
         WindowServices ws;
@@ -61,6 +99,12 @@ element Cytoplasm
                 }
                 else
                 {
+                    if(flipNeig && (neig.state != state))
+                    {
+                        neig.flip = true;
+                        ew[(SiteNum) slot] = neig;
+                    }
+
                     if(neig.dist > max)
                     {
                         max = neig.dist;
@@ -110,7 +154,7 @@ element Cytoplasm
         // Die when dist less than 1
         if(max < 1)
         {
-            die();
+            //die();
         }
         else
         {
