@@ -19,10 +19,10 @@ element Nucleus
     EventWindow ew;
 
     // Model Parameters
-    /**
-     * Determines the size
-     */
+    /** Determines the size */
     parameter Dist maxDist = 8;
+    /** Makes nucleus mobile */
+    parameter Bool diffuse = false;
 
     // Data members
     ID id = 1;
@@ -85,7 +85,7 @@ element Nucleus
         {
             die();
         }
-        else if(swap)
+        else if(swap && diffuse)
         {
            ew.swap(0, 1);
         }

@@ -100,5 +100,5 @@ Future Work
 ==
 
 * Make Membrane edges more solid
-* Make nucleus diffusable
+* Allow for nucleus border contention of some kind
 
