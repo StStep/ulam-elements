@@ -42,7 +42,8 @@ element Nucleus
         WindowServices ws;
         ws.reset(1,1);
         Unsigned(3) memNeig = 0;
-        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        Bool swap = false;
+        for(Int slot = 1; slot <= 4; ++slot)
         {
             // If Cytoplasm or empty, excite
             Atom a = ew[(SiteNum) slot];
@@ -52,6 +53,10 @@ element Nucleus
                 c.id = id;
                 c.dist = maxDist;
                 ew[(SiteNum) slot] = c;
+                if(slot == 1)
+                {
+                    swap = true;
+                }
             }
             // Die if unfriendly medium
             else if(a is Membrane)
@@ -63,7 +68,7 @@ element Nucleus
                     die();
                 }
             }
-            // If Nucleus Die
+            // If Nucleus do nothing
             else if(a is Nucleus)
             {
                 //Do Nothing
@@ -75,15 +80,14 @@ element Nucleus
             }
         }
 
-        // Only move if two or more  membrane
-        if(memNeig < 2)
-        {
-            ew.swap(0, 1);
-        }
         // Die if surrounded by membrane
-        else if(memNeig > 3)
+        if(memNeig > 3)
         {
             die();
+        }
+        else if(swap)
+        {
+           ew.swap(0, 1);
         }
         else
         {
