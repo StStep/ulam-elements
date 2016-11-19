@@ -83,7 +83,6 @@ element Membrane
                 {
                     swap = true;
                 }
-                badNeig = true;
             }
             else if(a is Membrane)
             {
