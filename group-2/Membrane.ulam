@@ -62,6 +62,18 @@ element Membrane
                     badNeig = true;
                 }
             }
+            else if(a is Nucleus)
+            {
+                Nucleus neig = (Nucleus) a;
+                if(neig.id != id)
+                {
+                    badNeig = true;
+                }
+                else
+                {
+                    goodNeig = true;
+                }
+            }
             else
             {
                 badNeig = true;

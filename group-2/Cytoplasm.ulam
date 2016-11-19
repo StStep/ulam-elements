@@ -65,7 +65,7 @@ element Cytoplasm
             // If empty and not on distance edge, make cyto
             else if(a is Empty)
             {
-                if(dist > 1)
+                if(dist > 2)
                 {
                     Cytoplasm c;
                     c.id = id;
@@ -101,10 +101,11 @@ element Cytoplasm
         // Decay and set
         --max;
 
-        // Harden when dist less than 2
-        if(max < 2)
+        // Die when dist less than 1
+        if(max < 1)
         {
-            harden();
+            Empty e;
+            ew[0] = e;
         }
         else
         {

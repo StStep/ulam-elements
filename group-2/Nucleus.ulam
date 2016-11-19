@@ -27,6 +27,12 @@ element Nucleus
     // Data members
     ID id = 1;
 
+    Void die()
+    {
+        Empty e;
+        ew[0] = e;
+    }
+
     /**
      * Primary runtime logic
      */
@@ -35,6 +41,7 @@ element Nucleus
         // Loop through neighbors
         WindowServices ws;
         ws.reset(1,1);
+        Unsigned(3) memNeig = 0;
         for(Int slot = ws.next(); slot >= 0; slot = ws.next())
         {
             // If Cytoplasm or empty, excite
@@ -46,11 +53,32 @@ element Nucleus
                 c.dist = maxDist;
                 ew[(SiteNum) slot] = c;
             }
+            // Die if unfriendly medium
+            else if(a is Membrane)
+            {
+                ++memNeig;
+                Membrane neig = (Membrane) a;
+                if(neig.id != id)
+                {
+                    die();
+                }
+            }
+            // If Nucleus Die
+            else if(a is Nucleus)
+            {
+                die();
+            }
             // Else do nothing if unknown
             else
             {
                 // Do nothing
             }
+        }
+
+        // Die if surrounded by membrane
+        if(memNeig > 3)
+        {
+            die();
         }
     }
 }
