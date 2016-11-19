@@ -23,6 +23,20 @@ element Membrane
     // Data members
     ID id;
 
+    Void die()
+    {
+        Empty e;
+        ew[0] = e;
+    }
+
+    Void dissolve()
+    {
+        Cytoplasm c;
+        c.id = id;
+        c.dist = 0;
+        ew[0] = c;
+    }
+
     /**
      * Primary runtime logic
      */
@@ -83,16 +97,12 @@ element Membrane
         // Die if no friends
         if(!goodNeig)
         {
-            Empty e;
-            ew[0] = e;
+            die();
         }
         // Else disolve if no bad neigbors
         else if(!badNeig)
         {
-            Cytoplasm c;
-            c.id = id;
-            c.dist = 0;
-            ew[0] = c;
+            dissolve();
         }
         else
         {

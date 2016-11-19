@@ -31,6 +31,12 @@ element Cytoplasm
         ew[0] = m;
     }
 
+    Void die()
+    {
+        Empty e;
+        ew[0] = e;
+    }
+
     /**
      * Primary runtime logic
      */
@@ -104,8 +110,7 @@ element Cytoplasm
         // Die when dist less than 1
         if(max < 1)
         {
-            Empty e;
-            ew[0] = e;
+            die();
         }
         else
         {
