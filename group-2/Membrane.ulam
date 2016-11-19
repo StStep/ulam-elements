@@ -20,6 +20,12 @@ element Membrane
     // Utilities
     EventWindow ew;
 
+    // Model Parameters
+    /** Membranes not sticky to unknown */
+    parameter Bool dieAlone = false;
+    /** Membranes less movable by cyto */
+    parameter Bool emptyBad = false;
+
     // Data members
     SiteNum moveDir;
 
@@ -79,6 +85,10 @@ element Membrane
             }
             else if(a is Empty)
             {
+                if(emptyBad)
+                {
+                    badNeig = true;
+                }
                 if(((SiteNum) slot) == moveDir)
                 {
                     swap = true;
@@ -115,7 +125,10 @@ element Membrane
         // Die if no friends
         if(!goodNeig)
         {
-            die();
+            if(dieAlone)
+            {
+                die();
+            }
         }
         // Else disolve if no bad neigbors
         else if(!badNeig)
