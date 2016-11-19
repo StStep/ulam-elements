@@ -58,7 +58,9 @@ Ability to reallocate space is based on gaps of diffusing nucleus coverage, mean
 * Once nucleus density reaches a point where there is full cyto coverage, most space reallocation stops, despite nuclei ratios
 
 ### Group 3
-TODO:
+Initial investigation fruitless, running into the fuse problem.
+
+**TODO:**
 Considering an outward pulse based growth, similar to an amorphous growth, but with space contention inherent.
 Pulses could be used by borders to determine movement.
 More pulses equal more weigt of movement
