@@ -15,7 +15,6 @@ element Nucleus
     typedef Unsigned(6) Timer;
     typedef EventWindow.SiteNum SiteNum;
     typedef EventWindow.Symmetry Symmetry;
-    typedef Cytoplasm.FlipTimeout FlipTimeout;
 
     // Utilities
     EventWindow ew;
@@ -73,7 +72,6 @@ element Nucleus
                 c.id = id;
                 c.dist = maxDist;
                 c.flip = flipNeig;
-                c.timeout = FlipTimeout.maxof;
                 c.state = state;
                 ew[(SiteNum) slot] = c;
                 if(slot == 1)

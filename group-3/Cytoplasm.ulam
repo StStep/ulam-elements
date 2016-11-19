@@ -16,7 +16,8 @@ element Cytoplasm
     typedef Nucleus.ID ID;
     typedef Nucleus.Dist Dist;
     typedef EventWindow.SiteNum SiteNum;
-    typedef Unsigned(4) FlipTimeout;
+    typedef Nucleus.Timer Timer;
+    typedef Unsigned(Timer.sizeof -1) FlipTimeout;
 
     // Utilities
     EventWindow ew;
@@ -61,8 +62,8 @@ element Cytoplasm
 
     Bool isTimedouted()
     {
-        ++timeout;
-        return (timeout == FlipTimeout.maxof);
+        --timeout;
+        return (timeout == 0);
     }
 
     /**
@@ -79,7 +80,7 @@ element Cytoplasm
             flip = false;
             state = !state;
             flipNeig = true;
-            timeout = 0;
+            timeout = FlipTimeout.maxof;
         }
 
         // Loop through neighbors
