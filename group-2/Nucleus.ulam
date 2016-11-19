@@ -2,7 +2,7 @@
  * Nucleus is a size management element.
  * \color #f29
  * \symbol Nu
- * \symmetries normal
+ * \symmetries all
  *
  * \author R. Stephens Summerlin
  * \license lgpl
@@ -66,7 +66,7 @@ element Nucleus
             // If Nucleus Die
             else if(a is Nucleus)
             {
-                die();
+                //Do Nothing
             }
             // Else do nothing if unknown
             else
@@ -75,10 +75,19 @@ element Nucleus
             }
         }
 
+        // Only move if no membrane
+        if(memNeig == 0)
+        {
+            ew.swap(0, 1);
+        }
         // Die if surrounded by membrane
-        if(memNeig > 3)
+        else if(memNeig > 3)
         {
             die();
+        }
+        else
+        {
+            // Do nothing
         }
     }
 }
