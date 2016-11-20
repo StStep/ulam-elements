@@ -1,0 +1,121 @@
+/**
+ * Cytoplasm is a size management element
+ * \color #22f
+ * \symbol Cy
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ *
+ */
+
+element Cytoplasm
+{
+    // Types
+    typedef Nucleus.ID ID;
+    typedef Nucleus.Dist Dist;
+    typedef EventWindow.SiteNum SiteNum;
+
+    // Utilities
+    EventWindow ew;
+
+    // Data members
+    ID id;
+    Dist dist;
+
+    Void harden()
+    {
+        Membrane m;
+        ew[0] = m;
+    }
+
+    Void die()
+    {
+        Empty e;
+        ew[0] = e;
+    }
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        // Setup temp map
+        Dist max = dist;
+
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            Atom a = ew[(SiteNum) slot];
+
+            // If friendly Cyto neigbor, calc max dist, otherwise membrane
+            if(a is Cytoplasm)
+            {
+                Cytoplasm neig = (Cytoplasm) a;
+                if(neig.id != id)
+                {
+                    harden();
+                }
+                else
+                {
+                    if(neig.dist > max)
+                    {
+                        max = neig.dist;
+                    }
+                }
+            }
+            // If empty and not on distance edge, make cyto
+            else if(a is Empty)
+            {
+                if(dist > 2)
+                {
+                    Cytoplasm c;
+                    c.id = id;
+                    c.dist = (Dist) (dist - 1);
+                    ew[(SiteNum) slot] = c;
+                }
+            }
+            // If membrane, suggest movement
+            else if(a is Membrane)
+            {
+                if(dist > 2)
+                {
+                    Membrane neig = (Membrane) a;
+                    neig.moveDir = (SiteNum) slot;
+                    ew[(SiteNum) slot] = neig;
+                }
+
+            }
+            else if(a is Nucleus)
+            {
+                Nucleus neig = (Nucleus) a;
+                if(neig.id != id)
+                {
+                    harden();
+                }
+            }
+            // Else become membrane if unknown
+            else
+            {
+                harden();
+            }
+        }
+
+        // Decay and set
+        --max;
+
+        // Die when dist less than 1
+        if(max < 1)
+        {
+            die();
+        }
+        else
+        {
+            dist = max;
+        }
+
+    }
+}
