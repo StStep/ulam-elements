@@ -20,7 +20,7 @@ element Nucleus
 
     // Model Parameters
     /** Determines the size */
-    parameter Dist maxDist = 8;
+    parameter Dist maxDist = 16;
     /** Makes nucleus mobile */
     parameter Bool diffuse = false;
 
@@ -39,8 +39,6 @@ element Nucleus
     Void behave()
     {
         // Loop through neighbors
-        WindowServices ws;
-        ws.reset(1,1);
         Unsigned(3) memNeig = 0;
         Bool swap = false;
         for(Int slot = 1; slot <= 4; ++slot)

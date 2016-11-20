@@ -21,13 +21,8 @@ element Membrane
     EventWindow ew;
 
     // Model Parameters
-    /** Membranes not sticky to unknown */
-    parameter Bool dieAlone = false;
-    /** Membranes less movable by cyto */
-    parameter Bool emptyBad = false;
 
     // Data members
-    SiteNum moveDir;
 
     Void die()
     {
@@ -49,25 +44,26 @@ element Membrane
     Void behave()
     {
         // Loop through neighbors
-        WindowServices ws;
-        ws.reset(1,1);
         Bool badNeig = false;
         Bool goodNeig = false;
-        Bool swap = false;
         ID lastId = 0;
-        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        SiteNum moveLoc = 0;
+        Dist minDist = Dist.maxof;
+        for(Int slot = 1; slot <= 4; ++slot)
         {
             Atom a = ew[(SiteNum) slot];
 
             // Check for unfriendly neighbors
             if(a is Cytoplasm)
             {
-                if(((SiteNum) slot) == moveDir)
+                Cytoplasm neig = (Cytoplasm) a;
+
+                if(neig.dist < minDist)
                 {
-                    swap = true;
+                    minDist = neig.dist;
+                    moveLoc = (Dist) slot;
                 }
 
-                Cytoplasm neig = (Cytoplasm) a;
                 // First neig with ID
                 if(lastId == 0)
                 {
@@ -85,14 +81,7 @@ element Membrane
             }
             else if(a is Empty)
             {
-                if(emptyBad)
-                {
-                    badNeig = true;
-                }
-                if(((SiteNum) slot) == moveDir)
-                {
-                    swap = true;
-                }
+                // Do nothing
             }
             else if(a is Membrane)
             {
@@ -125,20 +114,16 @@ element Membrane
         // Die if no friends
         if(!goodNeig)
         {
-            if(dieAlone)
-            {
-                die();
-            }
+            die();
         }
         // Else disolve if no bad neigbors
         else if(!badNeig)
         {
             dissolve(lastId);
         }
-        else if(swap)
+        else if(moveLoc != 0)
         {
-            //ew.swap(0, moveDir);
-            moveDir = 0;
+            ew[moveLoc] = self;
         }
         else
         {

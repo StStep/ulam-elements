@@ -78,16 +78,10 @@ element Cytoplasm
                     ew[(SiteNum) slot] = c;
                 }
             }
-            // If membrane, suggest movement
+            // If membrane, do nothing
             else if(a is Membrane)
             {
-                if(dist > 2)
-                {
-                    Membrane neig = (Membrane) a;
-                    neig.moveDir = (SiteNum) slot;
-                    ew[(SiteNum) slot] = neig;
-                }
-
+                // Do nothing
             }
             else if(a is Nucleus)
             {
