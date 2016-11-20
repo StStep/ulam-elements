@@ -63,6 +63,14 @@ element Membrane
                     minDist = neig.dist;
                     moveLoc = (Dist) slot;
                 }
+                else if(neig.dist == minDist)
+                {
+                    moveLoc = (Dist) 0; // Stable if matching sides
+                }
+                else
+                {
+                    // Do nothing
+                }
 
                 // First neig with ID
                 if(lastId == 0)
