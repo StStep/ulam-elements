@@ -66,6 +66,9 @@ Pulses could be used by borders to determine movement.
 More pulses equal more weigt of movement
 Pulses get weaker as the move outward, so two distance  pulses count less than one close pulse.
 
+### Group 4
+Take group 2, and make the boards dynamic, even under saturation conditions.
+Use a tug-of-war system.
 
 Future Work
 ==
