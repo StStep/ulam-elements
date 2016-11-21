@@ -20,6 +20,12 @@ element Cytoplasm
     // Utilities
     EventWindow ew;
 
+    // Model Parameters
+    /** The weak thresh, no spreading */
+    parameter Dist weakLim = 2;
+    /** The dist thresh where cyto dies, 0 disables */
+    parameter Dist deadLim = 1;
+
     // Data members
     ID id;
     Dist dist;
@@ -36,6 +42,14 @@ element Cytoplasm
         ew[0] = e;
     }
 
+    Void spread(SiteNum site)
+    {
+        Cytoplasm c;
+        c.id = id;
+        c.dist = (Dist) (dist - 1);
+        ew[site] = c;
+    }
+
     /**
      * Primary runtime logic
      */
@@ -45,11 +59,9 @@ element Cytoplasm
         Dist max = dist;
 
         // Loop through neighbors
-        WindowServices ws;
-        ws.reset(1,1);
-        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        for(SiteNum site = 1; site <= 4; ++site)
         {
-            Atom a = ew[(SiteNum) slot];
+            Atom a = ew[site];
 
             // If friendly Cyto neigbor, calc max dist, otherwise membrane
             if(a is Cytoplasm)
@@ -70,12 +82,9 @@ element Cytoplasm
             // If empty and not on distance edge, make cyto
             else if(a is Empty)
             {
-                if(dist > 2)
+                if(dist > weakLim)
                 {
-                    Cytoplasm c;
-                    c.id = id;
-                    c.dist = (Dist) (dist - 1);
-                    ew[(SiteNum) slot] = c;
+                    spread(site);
                 }
             }
             // If membrane, do nothing
@@ -101,8 +110,8 @@ element Cytoplasm
         // Decay and set
         --max;
 
-        // Die when dist less than 1
-        if(max < 1)
+        // Die when dist less than death lim
+        if(max < deadLim)
         {
             die();
         }
