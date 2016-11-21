@@ -22,7 +22,7 @@ element Cytoplasm
 
     // Model Parameters
     /** The weak thresh, no spreading */
-    parameter Dist weakLim = 2;
+    parameter Dist weakLim = 3;
     /** The dist thresh where cyto dies, 0 disables */
     parameter Dist deadLim = 1;
 
