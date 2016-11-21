@@ -52,6 +52,7 @@ element Membrane
         Bool contention = false;
         Bool unknown = false;
         Bool weakFriend = false;
+        Bool neutral = false;
         ID lastId = 0;
         Dist minDist = Dist.maxof;
         SiteNum minLoc = 0;
@@ -102,6 +103,7 @@ element Membrane
             else if(a is Empty)
             {
                 // Do nothing
+                neutral = true;
             }
             else if(a is Membrane)
             {
@@ -140,8 +142,8 @@ element Membrane
                 ew[minLoc] = self;
             }
         }
-        // Else disolve if all strong friends
-        else if(!weakFriend)
+        // Else disolve if all strong friends and no nuetral
+        else if(!neutral || !weakFriend)
         {
             dissolve(lastId);
         }

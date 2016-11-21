@@ -36,6 +36,12 @@ element Cytoplasm
         ew[0] = m;
     }
 
+    Void hardenOut(SiteNum site)
+    {
+        Membrane m;
+        ew[site] = m;
+    }
+
     Void die()
     {
         Empty e;
@@ -85,6 +91,10 @@ element Cytoplasm
                 if(dist > weakLim)
                 {
                     spread(site);
+                }
+                else
+                {
+                    hardenOut(site);
                 }
             }
             // If membrane, do nothing
