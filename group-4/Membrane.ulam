@@ -21,6 +21,10 @@ element Membrane
     EventWindow ew;
 
     // Model Parameters
+    /** The upper thresh for a weak neighbor */
+    parameter Dist weakLim = 2;
+    /** The cyto dist diff needed for movement */
+    parameter Dist conFlex = 2;
 
     // Data members
 
@@ -44,47 +48,55 @@ element Membrane
     Void behave()
     {
         // Loop through neighbors
-        Bool badNeig = false;
         Bool goodNeig = false;
+        Bool contention = false;
+        Bool unknown = false;
+        Bool weakFriend = false;
         ID lastId = 0;
-        SiteNum moveLoc = 0;
         Dist minDist = Dist.maxof;
-        for(Int slot = 1; slot <= 4; ++slot)
+        SiteNum minLoc = 0;
+        Dist maxDist = Dist.minof;
+        for(SiteNum site = 1; site <= 4; ++site)
         {
-            Atom a = ew[(SiteNum) slot];
+            Atom a = ew[site];
 
-            // Check for unfriendly neighbors
+            // Check for weak neighbors and contention
             if(a is Cytoplasm)
             {
                 Cytoplasm neig = (Cytoplasm) a;
+                goodNeig = true;
 
-                if(neig.dist < minDist)
+                // Check for weak cyto neig
+                if(neig.dist <= weakLim)
                 {
-                    minDist = neig.dist;
-                    moveLoc = (Dist) slot;
+                    weakFriend = true;
                 }
-                else if(neig.dist == minDist)
+
+                // Check for contention
+                if(lastId == 0)
                 {
-                    moveLoc = (Dist) 0; // Stable if matching sides
+                    lastId = neig.id;
+                }
+                else if(lastId != neig.id)
+                {
+                    contention = true;
                 }
                 else
                 {
                     // Do nothing
                 }
 
-                // First neig with ID
-                if(lastId == 0)
+                // Determine moveDir, for contention
+                if(neig.dist < minDist)
                 {
-                    lastId = neig.id;
-                    goodNeig = true;
+                    minDist = neig.dist;
+                    minLoc = site;
                 }
-                else if(lastId != neig.id)
+
+                // Determine moveDir, for contention
+                if(neig.dist > maxDist)
                 {
-                    badNeig = true;
-                }
-                else
-                {
-                    goodNeig = true;
+                    maxDist = neig.dist;
                 }
             }
             else if(a is Empty)
@@ -97,41 +109,41 @@ element Membrane
             }
             else if(a is Nucleus)
             {
-                Nucleus neig = (Nucleus) a;
-                // First neig with ID
-                if(lastId == 0)
-                {
-                    lastId = neig.id;
-                    goodNeig = true;
-                }
-                else if(lastId != neig.id)
-                {
-                    badNeig = true;
-                }
-                else
-                {
-                    goodNeig = true;
-                }
+                // Do nothing
             }
             else
             {
-                badNeig = true;
+                unknown = true;
             }
         }
 
-        // Die if no friends
+        // Die if no cyto
         if(!goodNeig)
         {
             die();
         }
-        // Else disolve if no bad neigbors
-        else if(!badNeig)
+        // Else if unknwon stay
+        else if(unknown)
+        {
+            // Stay put
+        }
+        // Else if, contention might move
+        else if(contention)
+        {
+            Dist distDiff = (Dist) (maxDist - minDist);
+            if(distDiff <= conFlex)
+            {
+                // Do nothing
+            }
+            else
+            {
+                ew[minLoc] = self;
+            }
+        }
+        // Else disolve if all strong friends
+        else if(!weakFriend)
         {
             dissolve(lastId);
-        }
-        else if(moveLoc != 0)
-        {
-            ew[moveLoc] = self;
         }
         else
         {
