@@ -145,7 +145,7 @@ element Membrane
             }
         }
         // Else disolve if all strong friends and no nuetral or surrounded by friends
-        else if(!neutral || !weakFriend || (goodCnt >= 2))
+        else if(!neutral || !weakFriend || (goodCnt >= 3))
         {
             dissolve(lastId);
         }
