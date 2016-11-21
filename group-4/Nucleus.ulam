@@ -33,6 +33,14 @@ element Nucleus
         ew[0] = e;
     }
 
+    Void spread(SiteNum site)
+    {
+        Cytoplasm c;
+        c.id = id;
+        c.dist = maxDist;
+        ew[site] = c;
+    }
+
     /**
      * Primary runtime logic
      */
@@ -41,17 +49,16 @@ element Nucleus
         // Loop through neighbors
         Unsigned(3) memNeig = 0;
         Bool swap = false;
-        for(Int slot = 1; slot <= 4; ++slot)
+        for(SiteNum site = 1; site <= 4; ++site)
         {
             // If Cytoplasm or empty, excite
-            Atom a = ew[(SiteNum) slot];
+            Atom a = ew[site];
             if((a is Cytoplasm) || (a is Empty))
             {
-                Cytoplasm c;
-                c.id = id;
-                c.dist = maxDist;
-                ew[(SiteNum) slot] = c;
-                if(slot == 1)
+                spread(site);
+
+                // Only swap to site 1, and only if empty or medium
+                if(site == 1)
                 {
                     swap = true;
                 }
@@ -78,6 +85,7 @@ element Nucleus
         {
             die();
         }
+        // Swap if enabled and is safe
         else if(swap && diffuse)
         {
            ew.swap(0, 1);
