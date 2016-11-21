@@ -30,6 +30,34 @@ element Cytoplasm
     ID id;
     Dist dist;
 
+    /**
+     * Hard-coded color options for debugging with
+     * ID 1, 2, and 3
+     */
+    ARGB getColor(Unsigned selector)
+    {
+        ColorUtils cu;
+        ARGB ret;
+        if(id == 1)
+        {
+            ret = cu.color(2,2,0xFF);
+        }
+        else if(id == 2)
+        {
+            ret = cu.color(2,0x60,0xFF);
+        }
+        else if(id == 3)
+        {
+            ret = cu.color(0x30,2,0xFF);
+        }
+        else // dead
+        {
+            ret = cu.color(2,2,2);
+        }
+
+        return ret;
+    }
+
     Void harden()
     {
         Membrane m;
