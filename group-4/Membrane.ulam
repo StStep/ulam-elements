@@ -57,6 +57,7 @@ element Membrane
         Dist minDist = Dist.maxof;
         SiteNum minLoc = 0;
         Dist maxDist = Dist.minof;
+        Unsigned(3) goodCnt = 0;
         for(SiteNum site = 1; site <= 4; ++site)
         {
             Atom a = ew[site];
@@ -66,6 +67,7 @@ element Membrane
             {
                 Cytoplasm neig = (Cytoplasm) a;
                 goodNeig = true;
+                ++goodCnt;
 
                 // Check for weak cyto neig
                 if(neig.dist <= weakLim)
@@ -142,8 +144,8 @@ element Membrane
                 ew[minLoc] = self;
             }
         }
-        // Else disolve if all strong friends and no nuetral
-        else if(!neutral || !weakFriend)
+        // Else disolve if all strong friends and no nuetral or surrounded by friends
+        else if(!neutral || !weakFriend || (goodCnt >= 2))
         {
             dissolve(lastId);
         }
