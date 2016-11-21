@@ -60,5 +60,5 @@ The life-cycle of Cytoplasm is strongly connected to the Membrane life-cycle.
 
 ###Membrane
 This element represents the boundary of allocated space.
-This element forms as Cytoplasm elements constant unknown elements, Cytoplasm of a differing ID, or the max allocation range.
+This element forms as Cytoplasm elements contact unknown elements, Cytoplasm of a differing ID, or the max allocation range.
 
