@@ -2,8 +2,10 @@ ULAM Elements
 ==
 
 These selection of elements are an attempt at producing an organization template for calculations in MFM. Note: There are 71 usable bits for element instance members, and 32 bits for quarks.
-To use these files, you'll need to install the Moveable Feast Machine: [description](https://github.com/elenasa/ULAM/wiki/Ulam-Programming-Language) and [source](https://github.com/DaveAckley/MFM)
+To use these files, you'll need to install the Movable Feast Machine: [description](https://github.com/elenasa/ULAM/wiki/Ulam-Programming-Language) and [source](https://github.com/DaveAckley/MFM)
 
+**Personal Restrictions**
+Currently, the event window lookups are restricted to adjacent sites, sites 1 through 4, as a HW implementation feasibility measure.
 
 Size Management
 --
@@ -18,61 +20,36 @@ The desired requirements for size management elements are the following:
 7. Separation from unknown
 8. Deal gracefully with inconsistencies in available space
 
-### Group 1
-Group 1 uses a crystalline method of allocating a size.
-This works as long as their are no inconsistancies in the area.
-As soon as the growth pattern is interrupted, the growth halts.
+**Groups**
+The selection process involved multiple development groups, with group 4 being chosen. More details in past commits.
+* Group 1 - Crystalline growth, limited by inconsistencies in available area
+* Group 2 - Initial amorphous growth attempt, unstable
+* Group 3 - Pulsing growth attempt, ran into growth instability, fuse problem
+* Group 4 - Based on group 2, with a logic pass-over to improve stability
 
-**Pros:**
-* Fulfills 4, 5 and 7
-* Very stable if no growth inconsistancies
+**Future Work**
+* Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
 
-**Cons:**
-* Very sensitive to area shape
-* No dynamic growth
+###Nucleus
+This element initiates site allocation, by creating Cytoplasm elements, and setting their dist data member.
+Has an ID, that is bestowed on Cytoplasm children.
+The ID is used to separate allocated sites by purpose.
+Two nuclei of differing ID will not merge, and will stay distinct.
+Two nuclei of the same ID will share allocated sites.
+A nucleus will die if it is surrounded by Membrane elements.
 
-### Group 2 (Nucleus do not diffuse)
-Group 2 has an amorphous growth pattern, which easily adapts to any shape.
-If the nucleus is immobile, a staic area can be allocated.
-An ID can be set for different nuclei to lead to a seperation of diff allocation spaces.
+**Parameter: diffuse**
+This parameter will cause nuclei to diffuse if enabled.
 
-**Pros:**
-* Fulfills all requirements but 2 and 6
-* Very flexible
+**Parameter: maxDist**
+This parameter determines how much space is allocated.
 
-**Cons:**
-* No dynamic allocation
-* Edges of allocation are unstable
+###Cytoplasm
+This element serves as the primary mechanism for size management.
+Keeps track of a distance value, that decrements going outwards from the nucleus, that is used to determine distance.
+The life-cycle of Cytoplasm is strongly connected to the Membrane life-cycle.
 
-### Group 2 (Nucleus diffuse)
-Group 2 has an amorphous growth pattern, which easily adapts to any shape.
-If the nucleus is mobile, clouds of nuclei can be used to dynamically allocate an area.
-Ratios of the areas depend upon concentration of each nuclei of each ID.
-Ability to reallocate space is based on gaps of diffusing nucleus coverage, meaning that the entire allocated space it not contained, or else dynamic allocation is lost.
-
-**Pros:**
-* Fulfills all requirements but 4
-
-**Cons:**
-* Doesn't have clear allocated space boundries at all times
-* Once nucleus density reaches a point where there is full cyto coverage, most space reallocation stops, despite nuclei ratios
-
-### Group 3
-Initial investigation fruitless, running into the fuse problem.
-
-**TODO:**
-Considering an outward pulse based growth, similar to an amorphous growth, but with space contention inherent.
-Pulses could be used by borders to determine movement.
-More pulses equal more weigt of movement
-Pulses get weaker as the move outward, so two distance  pulses count less than one close pulse.
-
-### Group 4
-Take group 2, and make the boards dynamic, even under saturation conditions.
-Use a tug-of-war system.
-
-Future Work
-==
-
-* Make Membrane edges more solid
-* Allow for nucleus border contention of some kind
+###Membrane
+This element represents the boundary of allocated space.
+This element forms as Cytoplasm elements constant unknown elements, Cytoplasm of a differing ID, or the max allocation range.
 
