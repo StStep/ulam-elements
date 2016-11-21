@@ -5,6 +5,7 @@ These selection of elements are an attempt at producing an organization template
 To use these files, you'll need to install the Movable Feast Machine: [description](https://github.com/elenasa/ULAM/wiki/Ulam-Programming-Language) and [source](https://github.com/DaveAckley/MFM)
 
 **Personal Restrictions**
+
 Currently, the event window lookups are restricted to adjacent sites, sites 1 through 4, as a HW implementation feasibility measure.
 
 Size Management
@@ -20,7 +21,12 @@ The desired requirements for size management elements are the following:
 7. Separation from unknown
 8. Deal gracefully with inconsistencies in available space
 
+**Demos**
+
+* [ULAM - Space Allocation Demo](https://www.youtube.com/watch?v=diiUx5CkXa4)
+
 **Groups**
+
 The selection process involved multiple development groups, with group 4 being chosen. More details in past commits.
 * Group 1 - Crystalline growth, limited by inconsistencies in available area
 * Group 2 - Initial amorphous growth attempt, unstable
@@ -28,6 +34,7 @@ The selection process involved multiple development groups, with group 4 being c
 * Group 4 - Based on group 2, with a logic pass-over to improve stability
 
 **Future Work**
+
 * Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
 
 ###Nucleus
@@ -39,9 +46,11 @@ Two nuclei of the same ID will share allocated sites.
 A nucleus will die if it is surrounded by Membrane elements.
 
 **Parameter: diffuse**
+
 This parameter will cause nuclei to diffuse if enabled.
 
 **Parameter: maxDist**
+
 This parameter determines how much space is allocated.
 
 ###Cytoplasm
