@@ -2,7 +2,7 @@
  * Nucleus is a size management element.
  * \color #f29
  * \symbol Nu
- * \symmetries all
+ * \symmetries normal
  *
  * \author R. Stephens Summerlin
  * \license lgpl
@@ -21,8 +21,6 @@ element Nucleus
     // Model Parameters
     /** Determines the size */
     parameter Dist maxDist = 16;
-    /** Makes nucleus mobile */
-    parameter Bool diffuse = false;
 
     // Data members
     ID id = 1;
@@ -55,7 +53,7 @@ element Nucleus
     {
         // Loop through neighbors
         Unsigned(3) memNeig = 0;
-        Bool swap = false;
+        Dist room[4];
         for(SiteNum site = 1; site <= 4; ++site)
         {
             // If Empty, spread
@@ -63,18 +61,29 @@ element Nucleus
             if(a is Empty)
             {
                 spread(site);
-
-                // Only swap to site 1, and only if empty or medium
-                if(site == 1)
-                {
-                    swap = true;
-                }
             }
             // If cytoplasm, excite
             else if(a is Cytoplasm)
             {
                 Cytoplasm c = (Cytoplasm) a;
                 excite(site, c);
+                if(site == 1)
+                {
+                    room[3] = c.room[3];
+                }
+                else if(site == 2)
+                {
+                    room[2] = c.room[2];
+                }
+                else if(site == 3)
+                {
+                    room[1] = c.room[1];
+                }
+                // Site == 4
+                else
+                {
+                    room[0] = c.room[0];
+                }
             }
             // Count surrounding membranes
             else if(a is Membrane)
@@ -98,11 +107,64 @@ element Nucleus
         {
             die();
         }
-        // Swap if enabled and is safe
-        else if(swap && diffuse)
+
+        // Move to optimize room
+        Int udDisp = ((Int) room[2]) - ((Int) room[1]);
+        Int lrDisp = ((Int) room[3]) - ((Int) room[0]);
+
+        Dist udAbs;
+        if(udDisp < 0)
         {
-           ew.swap(0, 1);
+            udAbs = (Dist) -udDisp;
         }
+        else
+        {
+            udAbs = (Dist) udDisp;
+        }
+
+        Dist lrAbs;
+        if(lrDisp < 0)
+        {
+            lrAbs =  (Dist) -lrDisp;
+        }
+        else
+        {
+            lrAbs = (Dist) lrDisp;
+        }
+
+        Bool isLarge = (udAbs > 2) || (lrAbs > 2);
+
+        // Move left/right
+        if(isLarge && (udAbs < lrAbs))
+        {
+            // Move right
+            if(lrDisp > 0)
+            {
+                ew.swap(0, 4);
+
+            }
+            // Move left
+            else
+            {
+                ew.swap(0, 1);
+            }
+        }
+        // Move up/down
+        else if(isLarge)
+        {
+            // Move Down
+            if(udDisp > 0)
+            {
+                ew.swap(0, 3);
+
+            }
+            // Move Up
+            else
+            {
+                ew.swap(0, 2);
+            }
+        }
+        // Don't move if disparity is small
         else
         {
             // Do nothing
