@@ -36,6 +36,10 @@ The selection process involved multiple development groups, with group 4 being c
 **Future Work**
 
 * Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
+* Nucleus auto-centering works with simple organizations, current isses:
+    * Corner sites are heavily prefered due to counting dirction
+    * Nuclei of the same ID clumb, making multiple ID Nuclei less effective, and limits ID coverage
+    * Nuclie swaping is type agnostic, maybe make it check some stuff first, such as only swaping to Cyto? Could fix at same time as corner preference.
 
 ###Nucleus
 This element initiates site allocation, by creating Cytoplasm elements, and setting their dist data member.
@@ -44,10 +48,7 @@ The ID is used to separate allocated sites by purpose.
 Two nuclei of differing ID will not merge, and will stay distinct.
 Two nuclei of the same ID will share allocated sites.
 A nucleus will die if it is surrounded by Membrane elements.
-
-**Parameter: diffuse**
-
-This parameter will cause nuclei to diffuse if enabled.
+Nuclei currently attempt to auto-center themselves within spaces, see Future Work for progress concerning this.
 
 **Parameter: maxDist**
 
