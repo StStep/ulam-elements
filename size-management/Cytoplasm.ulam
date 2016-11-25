@@ -28,7 +28,8 @@ element Cytoplasm
 
     // Data members
     ID id;
-    Dist dist;
+    Dist dist; // The distance from the nucleas
+    Dist room[4];
 
     /**
      * Hard-coded color options for debugging with
@@ -90,14 +91,14 @@ element Cytoplasm
     Void behave()
     {
         // Setup temp map
-        Dist max = dist;
+        Dist maxDist = dist;
 
         // Loop through neighbors
         for(SiteNum site = 1; site <= 4; ++site)
         {
             Atom a = ew[site];
 
-            // If friendly Cyto neigbor, calc max dist, otherwise membrane
+            // If friendly Cyto neigbor, calc maxDist dist, otherwise membrane
             if(a is Cytoplasm)
             {
                 Cytoplasm neig = (Cytoplasm) a;
@@ -107,9 +108,31 @@ element Cytoplasm
                 }
                 else
                 {
-                    if(neig.dist > max)
+                    if(neig.dist > maxDist)
                     {
-                        max = neig.dist;
+                        maxDist = neig.dist;
+                    }
+
+                    if(site == 1)
+                    {
+                        if(neig.room[3] > room[3])
+                            room[3] = neig.room[3];
+                    }
+                    else if(site == 2)
+                    {
+                        if(neig.room[2] > room[2])
+                            room[2] = neig.room[2];
+                    }
+                    else if(site == 3)
+                    {
+                        if(neig.room[1] > room[1])
+                            room[1] = neig.room[1];
+                    }
+                    // Site == 4
+                    else
+                    {
+                        if(neig.room[0] > room[0])
+                            room[0] = neig.room[0];
                     }
                 }
             }
@@ -125,10 +148,26 @@ element Cytoplasm
                     hardenOut(site);
                 }
             }
-            // If membrane, do nothing
+            // If membrane, calc room
             else if(a is Membrane)
             {
-                // Do nothing
+                if(site == 1)
+                {
+                    room[3] = Dist.maxof;
+                }
+                else if(site == 2)
+                {
+                    room[2] = Dist.maxof;
+                }
+                else if(site == 3)
+                {
+                    room[1] = Dist.maxof;
+                }
+                // Site == 4
+                else
+                {
+                    room[0] = Dist.maxof;
+                }
             }
             else if(a is Nucleus)
             {
@@ -146,16 +185,20 @@ element Cytoplasm
         }
 
         // Decay and set
-        --max;
+        --maxDist;
+        for(Int i = 0; i < 4; ++i)
+        {
+            --room[i];
+        }
 
         // Die when dist less than death lim
-        if(max < deadLim)
+        if(maxDist < deadLim)
         {
             die();
         }
         else
         {
-            dist = max;
+            dist = maxDist;
         }
 
     }

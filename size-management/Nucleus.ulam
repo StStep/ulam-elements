@@ -41,6 +41,13 @@ element Nucleus
         ew[site] = c;
     }
 
+    Void excite(SiteNum site, Cytoplasm c)
+    {
+        c.id = id;
+        c.dist = maxDist;
+        ew[site] = c;
+    }
+
     /**
      * Primary runtime logic
      */
@@ -51,9 +58,9 @@ element Nucleus
         Bool swap = false;
         for(SiteNum site = 1; site <= 4; ++site)
         {
-            // If Cytoplasm or empty, excite
+            // If Empty, spread
             Atom a = ew[site];
-            if((a is Cytoplasm) || (a is Empty))
+            if(a is Empty)
             {
                 spread(site);
 
@@ -62,6 +69,12 @@ element Nucleus
                 {
                     swap = true;
                 }
+            }
+            // If cytoplasm, excite
+            else if(a is Cytoplasm)
+            {
+                Cytoplasm c = (Cytoplasm) a;
+                excite(site, c);
             }
             // Count surrounding membranes
             else if(a is Membrane)
