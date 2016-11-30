@@ -54,6 +54,7 @@ element Nucleus
         // Loop through neighbors
         Unsigned(3) memNeig = 0;
         Dist room[4];
+        Bool safe[4];
         for(SiteNum site = 1; site <= 4; ++site)
         {
             // If Empty, spread
@@ -65,6 +66,7 @@ element Nucleus
             // If cytoplasm, excite
             else if(a is Cytoplasm)
             {
+                safe[site - 1] = true;
                 Cytoplasm c = (Cytoplasm) a;
                 excite(site, c);
                 if(site == 1)
@@ -140,13 +142,15 @@ element Nucleus
             // Move right
             if(lrDisp > 0)
             {
-                ew.swap(0, 4);
+                if(safe[3])
+                    ew.swap(0, 4);
 
             }
             // Move left
             else
             {
-                ew.swap(0, 1);
+                if(safe[0])
+                    ew.swap(0, 1);
             }
         }
         // Move up/down
@@ -155,13 +159,14 @@ element Nucleus
             // Move Down
             if(udDisp > 0)
             {
-                ew.swap(0, 3);
-
+                if(safe[2])
+                    ew.swap(0, 3);
             }
             // Move Up
             else
             {
-                ew.swap(0, 2);
+                if(safe[1])
+                    ew.swap(0, 2);
             }
         }
         // Don't move if disparity is small

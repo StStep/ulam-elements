@@ -37,9 +37,8 @@ The selection process involved multiple development groups, with group 4 being c
 
 * Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
 * Nucleus auto-centering works with simple organizations, current isses:
-    * Corner sites are heavily prefered due to counting dirction
-    * Nuclei of the same ID clumb, making multiple ID Nuclei less effective, and limits ID coverage
-    * Nuclie swaping is type agnostic, maybe make it check some stuff first, such as only swaping to Cyto? Could fix at same time as corner preference.
+    * Edges of world are preferable to auto-center, going to expect edges to exist for now
+    * Nuclei of the same ID clump, making multiple ID Nuclei less effective, and limits ID coverage. Maybe this is okay
 
 ###Nucleus
 This element initiates site allocation, by creating Cytoplasm elements, and setting their dist data member.
