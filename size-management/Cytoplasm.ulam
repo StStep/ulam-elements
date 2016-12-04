@@ -136,8 +136,8 @@ element Cytoplasm
                     }
                 }
             }
-            // If empty and not on distance edge, make cyto
-            else if(a is Empty)
+            // If empty or Medium and not on distance edge, make cyto
+            else if((a is Empty) || (a is Medium))
             {
                 if(dist > weakLim)
                 {

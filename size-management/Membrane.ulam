@@ -102,7 +102,7 @@ element Membrane
                     maxDist = neig.dist;
                 }
             }
-            else if(a is Empty)
+            else if((a is Empty) || (a is Medium))
             {
                 // Do nothing
                 neutral = true;

@@ -57,9 +57,9 @@ element Nucleus
         Bool safe[4];
         for(SiteNum site = 1; site <= 4; ++site)
         {
-            // If Empty, spread
+            // If Empty or Medium, spread
             Atom a = ew[site];
-            if(a is Empty)
+            if((a is Empty) || (a is Medium))
             {
                 spread(site);
             }
