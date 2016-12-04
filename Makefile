@@ -1,5 +1,5 @@
 default:
-	ulam Nucleus.ulam Cytoplasm.ulam Membrane.ulam
+	ulam --sd size-management Nucleus.ulam Cytoplasm.ulam Membrane.ulam
 
 .PHONY: run
 run:
