@@ -1,0 +1,63 @@
+/**
+ * Medium is a routing element
+ * \color #222
+ * \symbol Me
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ *
+ * \license lgpl
+ *
+ */
+
+element Medium
+{
+    // Types
+    typedef Map.Key Key;
+    typedef Map.Value Dist;
+    typedef EventWindow.SiteNum SiteNum;
+
+    // Utilities
+    EventWindow ew;
+
+    // Data members
+    Map distMap;
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        // Setup temp map
+        Map tmpMap = distMap;
+
+        // Loop through neighbors
+        WindowServices ws;
+        ws.reset(1,1);
+        for(Int slot = ws.next(); slot >= 0; slot = ws.next())
+        {
+            // If Medium neigbor, calc max dist for distMap
+            Atom a = ew[(SiteNum) slot];
+            if(a is Medium)
+            {
+                Medium neig = (Medium) a;
+                tmpMap.setMax(neig.distMap);
+            }
+            // If empty, propogate
+            else if(a is Empty)
+            {
+                Medium m;
+                ew[(SiteNum) slot] = m;
+            }
+            // Else do nothing
+            else
+            {
+                // Do nothing
+            }
+        }
+
+        // Decay all, either prev or max from neighbor
+        tmpMap.modify(-1);
+        distMap = tmpMap;
+    }
+}
