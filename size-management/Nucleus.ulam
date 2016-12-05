@@ -21,9 +21,32 @@ element Nucleus
     // Model Parameters
     /** Determines the size */
     parameter Dist maxDist = 16;
+    /** Determines the cycles to be stable */
+    parameter Unsigned(6) stableMinCycle = 30;
 
     // Data members
     ID id = 1;
+    Bool stable;
+    Unsigned(6) stabCount;
+
+    /**
+     * Hard-coded color options for debugging with
+     */
+    ARGB getColor(Unsigned selector)
+    {
+        ColorUtils cu;
+        ARGB ret;
+        if(stable)
+        {
+            ret = cu.color(0xFF,0x50,0xFF);
+        }
+        else // unstable
+        {
+            ret = cu.color(0xFF,2,0x50);
+        }
+
+        return ret;
+    }
 
     Void die()
     {
@@ -152,6 +175,8 @@ element Nucleus
                 if(safe[0])
                     ew.swap(0, 1);
             }
+            --stabCount;
+            stable = false;
         }
         // Move up/down
         else if(isLarge)
@@ -168,11 +193,21 @@ element Nucleus
                 if(safe[1])
                     ew.swap(0, 2);
             }
+            --stabCount;
+            stable = false;
         }
-        // Don't move if disparity is small
+        // Count stable cycles
         else
         {
-            // Do nothing
+            if(stabCount > stableMinCycle)
+            {
+                stable = true;
+            }
+            else
+            {
+                ++stabCount;
+                stable = false;
+            }
         }
     }
 }
