@@ -115,15 +115,19 @@ element Nucleus
             {
                 ++memNeig;
             }
-            // If Nucleus do nothing
+            // Die if foriegn nuclei
             else if(a is Nucleus)
             {
-                //Do Nothing
+                Nucleus n = (Nucleus) a;
+                if(n.id != id)
+                {
+                    die();
+                }
             }
-            // Else do nothing if unknown
+            // Else die if unknown
             else
             {
-                // Do nothing
+               die();
             }
         }
 
