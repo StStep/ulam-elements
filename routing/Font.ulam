@@ -1,0 +1,30 @@
+/**
+ * Font is a routing element.
+ * \color #e2a
+ * \symbol Fo
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ * \license lgpl
+ */
+element Font
+{
+    // Types
+    typedef EventWindow.SiteNum SiteNum;
+    typedef EventWindow.Symmetry Symmetry;
+
+    // Utilities
+    EventWindow ew;
+
+    // Model Parameters
+
+    // Data members
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        // Do nothing
+    }
+}

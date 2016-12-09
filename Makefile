@@ -1,5 +1,5 @@
 default:
-	ulam --sd size-management Nucleus.ulam Cytoplasm.ulam Membrane.ulam --sd routing Medium.ulam Map.ulam ExciterT.ulam
+	ulam --sd size-management Nucleus.ulam Cytoplasm.ulam Membrane.ulam --sd routing Medium.ulam Map.ulam ExciterT.ulam Font.ulam
 
 .PHONY: run
 run:
