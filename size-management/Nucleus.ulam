@@ -48,6 +48,12 @@ element Nucleus
         return ret;
     }
 
+    Void bloom()
+    {
+        Font f;
+        ew[0] = f;
+    }
+
     Void die()
     {
         Empty e;
@@ -64,9 +70,17 @@ element Nucleus
 
     Void excite(SiteNum site, Cytoplasm c)
     {
-        c.id = id;
-        c.dist = maxDist;
-        ew[site] = c;
+        if(stable)
+        {
+            c.bloom = true;
+            ew[site] = c;
+        }
+        else
+        {
+            c.id = id;
+            c.dist = maxDist;
+            ew[site] = c;
+        }
     }
 
     /**
@@ -180,7 +194,6 @@ element Nucleus
                     ew.swap(0, 1);
             }
             --stabCount;
-            stable = false;
         }
         // Move up/down
         else if(isLarge)
@@ -198,7 +211,6 @@ element Nucleus
                     ew.swap(0, 2);
             }
             --stabCount;
-            stable = false;
         }
         // Count stable cycles
         else
@@ -210,8 +222,12 @@ element Nucleus
             else
             {
                 ++stabCount;
-                stable = false;
             }
+        }
+
+        if(stable)
+        {
+            bloom();
         }
     }
 }

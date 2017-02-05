@@ -30,6 +30,7 @@ element Cytoplasm
     ID id;
     Dist dist; // The distance from the nucleas
     Dist room[4];
+    Bool bloom;
 
     /**
      * Hard-coded color options for debugging with
@@ -79,10 +80,18 @@ element Cytoplasm
 
     Void spread(SiteNum site)
     {
-        Cytoplasm c;
-        c.id = id;
-        c.dist = (Dist) (dist - 1);
-        ew[site] = c;
+        if(bloom)
+        {
+            Medium m;
+            ew[site] = m;
+        }
+        else
+        {
+            Cytoplasm c;
+            c.id = id;
+            c.dist = (Dist) (dist - 1);
+            ew[site] = c;
+        }
     }
 
     /**
@@ -102,12 +111,20 @@ element Cytoplasm
             if(a is Cytoplasm)
             {
                 Cytoplasm neig = (Cytoplasm) a;
+
                 if(neig.id != id)
                 {
                     harden();
                 }
                 else
                 {
+                    if(bloom)
+                    {
+                        neig.bloom = true;
+                        ew[site] = neig;
+                        continue;
+                    }
+
                     if(neig.dist > maxDist)
                     {
                         maxDist = neig.dist;
@@ -177,10 +194,20 @@ element Cytoplasm
                     harden();
                 }
             }
+            else if(a is Font)
+            {
+                // Do nothing
+            }
             // Else become membrane if unknown
             else
             {
                 harden();
+            }
+
+            if(bloom)
+            {
+                Medium m;
+                ew[0] = m;
             }
         }
 
