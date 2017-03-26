@@ -5,14 +5,14 @@
    Note: There are 71 usable bits for element instance members, and 32 bits for quarks.
 
 ** Personal Restrictions
-   Currently, the event window lookups are restricted to adjacent sites, sites 1 through 4
+   Currently, the event window look-ups are restricted to adjacent sites, sites 1 through 4
    as a HW implementation feasibility measure.
 
 
 * Allocations Types
    The desired requirements for allocation, size management, systems are the following:
    + Containing a space with a specified shape
-   + Able to specificy a max allocation
+   + Able to specify a max allocation
    + Separates between different allocation IDs and from unknown elements
    + Growth of allocated space tries to fill available space
    + Deal gracefully with inconsistencies in shape of available space
@@ -49,7 +49,7 @@
 
 *** Future Work
     + [ ] Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
-    + [ ] Nucleus auto-centering works with simple organizations, current isses:
+    + [ ] Nucleus auto-centering works with simple organizations, current issues:
       + Edges of world are preferable to auto-center, going to expect edges to exist for now
       + Nuclei of the same ID clump, making multiple ID Nuclei less effective, and limits ID coverage. Maybe this is okay
 
@@ -109,7 +109,7 @@
   The following are the requirements for organization:
   + Relative addressing levels
     + Absolute addressing is not possible
-  + Perform some kind of lifecycle management
+  + Perform some kind of life-cycle management
   + Current Levels include:
     1. Organ Layer
     2. Lobe Layer
@@ -117,8 +117,8 @@
 
 ** Hierarchical Loop Organization
    This forms the general organization of an organ.
-   A hierachical loop, where a central loop has a controlled distribution of contents.
-   This distribution is then propogated through adjoining loops, indirectly.
+   A hierarchical loop, where a central loop has a controlled distribution of contents.
+   This distribution is then propagated through adjoining loops, indirectly.
 
 *** Organization Summary
 
@@ -146,14 +146,14 @@
 *** Notes
 
 **** Organ
-     + Heirachical loop top-level
+     + Hierarchical loop top-level
      + Primary address level
      + Has an allocation bubble
      + Basic I/O ports
-     + Central kernal/node
-       + Connets to lobes and I/O
+     + Central kernel/node
+       + Connects to lobes and I/O
      + Lobes have width, determines leaf height
-       + Coil out into avialable space
+       + Coil out into available space
        + Fit as many as possible with given width
 
 **** Leaves
@@ -165,7 +165,7 @@
      + Filters grow from stars
        + perform data processing
 
-*** Growth and Lifecycle
+*** Growth and Life-cycle
 
 **** Leaf and Lobe Growth
      + Could be similar
@@ -175,7 +175,7 @@
        + leaves can cross lobe boundaries
      + both could embed and grow?
 
-**** Organ Lifecycle
+**** Organ Life-cycle
      1. Organ stem exists
      2. Performs bubble allocation
      3. stem -> kernel
@@ -183,22 +183,22 @@
      5. Kernel inserts lobe stems
      6. Kernel inserts leave stems
      7. Open for business
-     8. Homeostatis
+     8. Homeostasis
 
-**** Lobe Lifecycle
+**** Lobe Life-cycle
      1. Lobe stem exists
      2. embed self in kernel wall
-     3. perfrom noodle allocation
-     4. Homeostatis
+     3. perform noodle allocation
+     4. Homeostasis
 
-**** Leaf Lifecycle
+**** Leaf Life-cycle
      1. Leaf stem exists
      2. Embeds self in lobe wall
      3. Performs noodle allocation
      4. Grows filters
-     5. Homeostatis
+     5. Homeostasis
 
-*** Homeostatis
+*** Homeostasis
 
 **** Allocation
     + Die if allocation issues found
@@ -215,14 +215,14 @@
      + I/O have straight flow
 
 **** Gating
-     Gates change adressing levels? Could leaf data only be valid within organs?
+     Gates change addressing levels? Could leaf data only be valid within organs?
      Needing a special conversion to be viable on the organ addressing level?
 
      + Organ ID based
        + Organ Gate
          + White-list data
        + Kernel Gate
-         + WHite list data
+         + White list data
      + Leaf ID Based
        + Leaf Gate
          + White-list data
@@ -246,7 +246,7 @@
 
 *** Development
 
-**** TODO Block out heirarchy
+**** TODO Block out hierarchy
 
 **** TODO Implement Path Allocation
 
@@ -266,6 +266,11 @@
    + Like Ecosystem
      + Rot and decay
      + Multiple levels of decay, chewing and then breakdown
+
+** Ulam Implementation
+   + Each processor is a pointer to the law if physics
+   + Law of physics will need to be distributed in some fashion, maybe N processors per program memory
+   + Law of physics are compiled code and each processors element is decided by what line (program counter) the element has
 
 ** Organ Creation Regeneration
     Organs regenerate insides
@@ -313,6 +318,9 @@
    + need to make it to edges for I/O
    + what about processing ?
 *** Road Signs
-    + Perhaps major pathways exist and forks have roadsigns saying what is which direction, and distance
+    + Perhaps major pathways exist and forks have road-signs saying what is which direction, and distance
     + Road-signs update periodically when they see still-alive signals?
     + Road signs communicate with one another about what they say
+
+** Databases
+   How to add/remove data within reason if stuff can go wrong?
