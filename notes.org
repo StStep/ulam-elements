@@ -1,0 +1,146 @@
+* Heirachical Loop
+  A hierachical loop, where a central loop has a controlled distribution of contents. 
+  This distribution is then propogated through adjoining loops, indirectly.
+
+** Summary
+*** Organ
+    + Bubble allocation
+    + Variables
+      + Max Radius
+      + Organ ID
+        + determine leave/stem IDs
+*** Lobes (generic)
+    + Noodle allocation
+    + Variables
+      + base width
+      + max length
+*** Leaves
+    + Noodle allocation
+    + Variables
+      + Base width
+      + max length
+    + Stem ID
+      + Determines filters
+
+** Notes
+*** Organ
+    + Heirachical loop top-level
+    + Primary address level
+    + Has an allocation bubble
+    + Basic I/O ports
+    + Central kernal/node
+      + Connets to lobes and I/O
+    + Lobes have width, determines leaf height
+      + Coil out into avialable space
+      + Fit as many as possible with given width
+*** Leaves
+    + Grow within lobe wall
+    + Circulated through system and embed where there is open space
+    + simple loop
+    + has base width
+    + stem forms center
+    + Filters grow from stars
+      + perform data processing
+** Growth and Lifecycle
+*** Leaf and Lobe Growth
+    + Could be similar
+    + Has base width
+    + Pushes into growth medium
+    + Stem path is important part of lobe growth
+      + leaves can cross lobe boundaries
+    + both could embed and grow?
+
+*** Organ Lifecycle
+    1. Organ stem exists
+    2. Performs bubble allocation
+    3. stem -> kernel
+    4. Grows I/O lines
+    5. Kernel inserts lobe stems
+    6. Kernel inserts leave stems
+    7. Open for business
+    8. Homeostatis
+
+*** Lobe Lifecycle
+    1. Lobe stem exists
+    2. embed self in kernel wall
+    3. perfrom noodle allocation
+    4. Homeostatis
+
+*** Leaf Lifecycle
+    1. Leaf stem exists
+    2. Embeds self in lobe wall
+    3. Performs noodle allocation
+    4. Grows filters
+    5. Homeostatis
+       
+** Homeostatis
+*** Allocation
+   + Die if allocation issues found
+   + Stem cells in permanent allocation, constant circulation
+     + Promotes regrowth of failed leaves and lobes
+   + If leave type missing or in short supply, cull population and replace
+     + Determine percentage of each
+     + Dynamically handle % based on input
+       + starving leaves w/constant stem circulation?
+   + Dynamic regulation of stems in kernel
+     
+*** Circulation
+    + Kernel has a circular flow
+    + I/O have straight flow
+
+*** Gating
+    Gates change adressing levels? Could leaf data only be valid within organs?
+    Needing a special conversion to be viable on the organ addressing level?
+
+    + Organ ID based
+      + Organ Gate
+        + White-list data
+      + Kernel Gate
+        + WHite list data
+    + Leaf ID Based
+      + Leaf Gate
+        + White-list data
+    + Dynamic
+      + Lobe Gate
+        + Dynamically white-list based on contained leaf IDs
+          
+** IDs
+*** Organ IDs
+    + Input data
+    + Output data
+    + Leaf ID distribution
+    + Allocation size
+    + Lobe width and length
+
+*** Leaf ID
+    + Input data
+    + Filters -> Output Data
+    + Width and Length
+
+
+    
+* Allocations Types
+
+** Bubble Allocation
+   + Creates a circle if given infinite room
+   + Allocates using a max radius from a center point
+   + Locates the centroid of a space if constrained
+   + Standard allocation on display in github repo.
+   
+** Noodle Allocation
+   + Creates rectangle if given infinite room
+   + Goal is the allocation of a path of a minimum width
+   + Allocations from a line outwards using a line width and max length
+   + Ideally, will bend to use up available space
+     
+*** TODO Edge
+    + Build layer by layer by active edge
+    + The edge being built changes from cycle to cycle based on open sites
+
+*** TODO Blow Bubbles
+    + Using mutliple bubble allocations
+    + The centers of each bubble allocation form the path
+    + Could have an arc restriction
+      
+*** TODO Grow Noodle From Base
+    + Have forward edge handle collision and bending?
