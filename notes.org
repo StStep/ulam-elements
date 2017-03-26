@@ -1,10 +1,10 @@
 * Specifications
 
 ** Element Restrictions
-  Note: There are 71 usable bits for element instance members, and 32 bits for quarks.
+   Note: There are 71 usable bits for element instance members, and 32 bits for quarks.
 
 ** Personal Restrictions
-  Currently, the event window lookups are restricted to adjacent sites, sites 1 through 4, as a HW implementation feasibility measure.
+   Currently, the event window lookups are restricted to adjacent sites, sites 1 through 4, as a HW implementation feasibility measure.
 
 
 * Heirachical Loop
@@ -128,30 +128,98 @@
 
 
 * Allocations Types
+   The desired requirements for allocation, size management, systems are the following:
+   + Containing a space with a specified shape
+   + Able to specificy a max allocation
+   + Separates between different allocation IDs and from unknown elements
+   + Growth of allocated space tries to fill available space
+   + Deal gracefully with inconsistencies in shape of available space
+   + Kill allocation process if unfeasable
+
+*** Demos
+   + [ULAM - Bubble Allocation Demo](https://www.youtube.com/watch?v=diiUx5CkXa4)
 
 ** Bubble Allocation
-   + Creates a circle if given infinite room
+   + Creates a circle of a max radius if given infinite room
    + Allocates using a max radius from a center point
    + Locates the centroid of a space if constrained
    + Standard allocation on display in github repo.
 
-** Noodle Allocation
-   + Creates rectangle if given infinite room
+*** Development Process
+   The chosen bubble allocation process went through multiple development stages.
+   The selection process involved multiple development groups, with *Group 4* being chosen. More details in past commits.
+
+**** DONE Group 1
+     CLOSED: [2017-03-26 Sun 17:05]
+     Crystalline growth, limited by inconsistencies in available area
+
+**** DONE Group 2
+     CLOSED: [2017-03-26 Sun 17:05]
+     Initial amorphous growth attempt, unstable
+
+**** DONE Group 3
+     CLOSED: [2017-03-26 Sun 17:05]
+     Pulsing growth attempt, ran into growth instability, fuse problem
+
+**** DONE Group 4
+     CLOSED: [2017-03-26 Sun 17:05]
+     Based on group 2, with a logic pass-over to improve stability
+
+*** Future Work
+    + [ ] Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
+    + [ ] Nucleus auto-centering works with simple organizations, current isses:
+      + Edges of world are preferable to auto-center, going to expect edges to exist for now
+      + Nuclei of the same ID clump, making multiple ID Nuclei less effective, and limits ID coverage. Maybe this is okay
+
+*** Elements
+    The following elements make up the bubble allocation process.
+
+**** Nucleus
+     + This element initiates site allocation, by creating Cytoplasm elements, and setting their dist data member.
+     + Has an ID, that is bestowed on Cytoplasm children.
+     + The ID is used to separate allocated sites by purpose.
+     + Two nuclei of differing ID will not merge, and will stay distinct.
+     + Two nuclei of the same ID will share allocated sites.
+     + A nucleus will die if it is surrounded by Membrane elements.
+     + Nuclei currently attempt to auto-center themselves within spaces, see Future Work for progress concerning this.
+     + Parameters:
+       + maxDist :: This parameter determines how much space is allocated.
+
+**** Cytoplasm
+     + This element serves as the primary mechanism for size management.
+     + Keeps track of a distance value, that decrements going outwards from the nucleus, that is used to determine distance.
+     + The life-cycle of Cytoplasm is strongly connected to the Membrane life-cycle.
+
+**** Membrane
+     + This element represents the boundary of allocated space.
+     + This element forms as Cytoplasm elements contact unknown elements, Cytoplasm of a differing ID, or the max allocation range.
+
+** Path Allocation
+   + Creates straight path of a given max width and length if given infinite room
    + Goal is the allocation of a path of a minimum width
-   + Allocations from a line outwards using a line width and max length
+   + Allocations from an edge outwards using a max width and max length
    + Ideally, will bend to use up available space
 
-*** TODO Edge
-    + Build layer by layer by active edge
-    + The edge being built changes from cycle to cycle based on open sites
+*** Development Process
+    Below are propossed development directions that this allocation can be accomplished by.
 
-*** TODO Blow Bubbles
-    + Using mutliple bubble allocations
-    + The centers of each bubble allocation form the path
-    + Could have an arc restriction
+**** TODO Edge
+     + Build layer by layer by active edge
+     + The edge being built changes from cycle to cycle based on open sites
 
-*** TODO Grow Noodle From Base
-    + Have forward edge handle collision and bending?
+**** TODO Blow Bubbles
+     + Using mutliple bubble allocations
+     + The centers of each bubble allocation form the path
+     + Could have an arc restriction
+
+**** TODO Grow Noodle From Base
+     + Have forward edge handle collision and bending?
+
+*** Future Work
+    Not yet implemented
+
+*** Elements
+    No elements currently exist for this process.
 
 
 * Transportation Layers (Organism)
@@ -207,57 +275,3 @@
 ** Ideas
   + What if barrier have relative internal distance reported by mediums, as it’s acceptance report, could help getting shortest path through multiple barriers? Don’t know what other say, so will end up being absolute??
   + What about having some weight based on concentration?
-
-
-* Size Management
-  The desired requirements for size management elements are the following:
-
-  1. Allocate space in ratios
-  2. Have changing desired ratios change actual ratios
-  3. Separation between different allocation IDs
-  4. Containing a space
-  5. Want max allocation of some kind
-  6. Want movement of allocated space to try and fill available space optimally
-  7. Separation from unknown
-  8. Deal gracefully with inconsistencies in available space
-
-** Demos
-  + [ULAM - Space Allocation Demo](https://www.youtube.com/watch?v=diiUx5CkXa4)
-
-** Groups
-  The selection process involved multiple development groups, with group 4 being chosen. More details in past commits.
-  + Group 1 - Crystalline growth, limited by inconsistencies in available area
-  + Group 2 - Initial amorphous growth attempt, unstable
-  + Group 3 - Pulsing growth attempt, ran into growth instability, fuse problem
-  + Group 4 - Based on group 2, with a logic pass-over to improve stability
-
-** Future Work
-  + Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
-  + Nucleus auto-centering works with simple organizations, current isses:
-    + Edges of world are preferable to auto-center, going to expect edges to exist for now
-    + Nuclei of the same ID clump, making multiple ID Nuclei less effective, and limits ID coverage. Maybe this is okay
-
-** Elements
-
-*** Nucleus
-    This element initiates site allocation, by creating Cytoplasm elements, and setting their dist data member.
-    Has an ID, that is bestowed on Cytoplasm children.
-    The ID is used to separate allocated sites by purpose.
-    Two nuclei of differing ID will not merge, and will stay distinct.
-    Two nuclei of the same ID will share allocated sites.
-    A nucleus will die if it is surrounded by Membrane elements.
-    Nuclei currently attempt to auto-center themselves within spaces, see Future Work for progress concerning this.
-
-    Parameters:
-      + maxDist :: This parameter determines how much space is allocated.
-
-*** Cytoplasm
-    This element serves as the primary mechanism for size management.
-    Keeps track of a distance value, that decrements going outwards from the nucleus, that is used to determine distance.
-    The life-cycle of Cytoplasm is strongly connected to the Membrane life-cycle.
-
-*** Membrane
-    This element represents the boundary of allocated space.
-    This element forms as Cytoplasm elements contact unknown elements, Cytoplasm of a differing ID, or the max allocation range.
-
-
