@@ -16,7 +16,7 @@
    + Separates between different allocation IDs and from unknown elements
    + Growth of allocated space tries to fill available space
    + Deal gracefully with inconsistencies in shape of available space
-   + Kill allocation process if unfeasable
+   + Kill allocation process if unfeasible
 
 *** Demos
    + [ULAM - Bubble Allocation Demo](https://www.youtube.com/watch?v=diiUx5CkXa4)
@@ -83,16 +83,17 @@
    + Ideally, will bend to use up available space
 
 *** Development Process
-    Below are propossed development directions that this allocation can be accomplished by.
+    Below are proposed development directions that this allocation can be accomplished by.
 
 **** TODO Edge Idea
      + Build layer by layer by active edge
      + The edge being built changes from cycle to cycle based on open sites
 
 **** TODO Blow Bubbles Idea
-     + Using mutliple bubble allocations
+     + Using multiple bubble allocations
      + The centers of each bubble allocation form the path
      + Could have an arc restriction
+     + Bubbles on a chain?
 
 **** TODO Grow Noodle From Base Idea
      + Have forward edge handle collision and bending?
@@ -106,7 +107,7 @@
 
 * Organization Levels
   The following are the requirements for organization:
-  + Relative adressing levels
+  + Relative addressing levels
     + Absolute addressing is not possible
   + Perform some kind of lifecycle management
   + Current Levels include:
@@ -114,7 +115,7 @@
     2. Lobe Layer
     3. Leaf Layer
 
-** Heirachical Loop Organization
+** Hierarchical Loop Organization
    This forms the general organization of an organ.
    A hierachical loop, where a central loop has a controlled distribution of contents.
    This distribution is then propogated through adjoining loops, indirectly.
@@ -252,3 +253,66 @@
 
 * Unsorted Notes
   A collection of miscellaneous unorganized notes.
+
+** Robust Calculation Basics
+   + Need multiple observes of input
+   + Able to recover and not spoil whole calculation process by a single bad calculation
+   + Single missing data element should not be an issue
+
+** Decay Cleanup
+   + Like human
+     + T-cells
+     + Macro-phages
+   + Like Ecosystem
+     + Rot and decay
+     + Multiple levels of decay, chewing and then breakdown
+
+** Organ Creation Regeneration
+    Organs regenerate insides
+    If organ dies, takes too much damage to regenerate , it's not rebuilt and organism will die
+
+    + Shoot ?Egg? Into system, spawns organs which lead to organism
+    + Entered from edge of tile
+    + could fail, in that case shoot another egg in
+
+    Have some way of telling if tile organism has died or failed to gestate?
+    Maybe a poison to clean up tile of partially developed organisms
+    Or so simply power cycle tile
+
+** Calculation Hierarchy
+   Organ
+   + Think standard library
+   - queue, stack, sort, I/O interface
+
+   Organism
+   + Appliance (Toaster, Soda Machine)
+   + control system
+
+** Hide and Heal
+   + when to know to heal??
+   - error produce hormone, that at certain density leads to death?
+
+** Inter-Organ Communication
+   + Could use medium distance field to guide a growing tendril
+   + Goal would be to connect to a specific organ
+   + Once connected, could be used for high throughput routing of info to that organ
+   + if cut, could regrow
+
+** Communication Levels
+   Think about spatial travel
+   + Train for long range
+   + trucks mid range
+   + walk short range (walking and diffusion)
+
+   Data storage
+   + Could have special data storage elements
+   + think barrels that you can load up on trains or trucks
+
+   What makes a destination unique? Why travel ?
+   + Certain spatial locations are required for I/O and devices in general
+   + need to make it to edges for I/O
+   + what about processing ?
+*** Road Signs
+    + Perhaps major pathways exist and forks have roadsigns saying what is which direction, and distance
+    + Road-signs update periodically when they see still-alive signals?
+    + Road signs communicate with one another about what they say
