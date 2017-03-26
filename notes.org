@@ -155,6 +155,7 @@
 
 
 * Transportation Layers (Organism)
+
 ** Active layer
   + Information moved as an element unit
   + Move() - Copy an element and delete source , walking
@@ -207,6 +208,7 @@
   + What if barrier have relative internal distance reported by mediums, as it’s acceptance report, could help getting shortest path through multiple barriers? Don’t know what other say, so will end up being absolute??
   + What about having some weight based on concentration?
 
+
 * Size Management
   The desired requirements for size management elements are the following:
 
@@ -257,3 +259,5 @@
 *** Membrane
     This element represents the boundary of allocated space.
     This element forms as Cytoplasm elements contact unknown elements, Cytoplasm of a differing ID, or the max allocation range.
+
+
