@@ -248,3 +248,7 @@
 **** TODO Block out heirarchy
 
 **** TODO Implement Path Allocation
+
+
+* Unsorted Notes
+  A collection of miscellaneous unorganized notes.
