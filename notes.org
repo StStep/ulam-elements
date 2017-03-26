@@ -1,130 +1,12 @@
 * Specifications
+  General restrictions being followed.
 
 ** Element Restrictions
    Note: There are 71 usable bits for element instance members, and 32 bits for quarks.
 
 ** Personal Restrictions
-   Currently, the event window lookups are restricted to adjacent sites, sites 1 through 4, as a HW implementation feasibility measure.
-
-
-* Heirachical Loop
-  A hierachical loop, where a central loop has a controlled distribution of contents.
-  This distribution is then propogated through adjoining loops, indirectly.
-
-** Summary
-*** Organ
-    + Bubble allocation
-    + Variables
-      + Max Radius
-      + Organ ID
-        + determine leave/stem IDs
-*** Lobes (generic)
-    + Noodle allocation
-    + Variables
-      + base width
-      + max length
-*** Leaves
-    + Noodle allocation
-    + Variables
-      + Base width
-      + max length
-    + Stem ID
-      + Determines filters
-
-** Notes
-*** Organ
-    + Heirachical loop top-level
-    + Primary address level
-    + Has an allocation bubble
-    + Basic I/O ports
-    + Central kernal/node
-      + Connets to lobes and I/O
-    + Lobes have width, determines leaf height
-      + Coil out into avialable space
-      + Fit as many as possible with given width
-*** Leaves
-    + Grow within lobe wall
-    + Circulated through system and embed where there is open space
-    + simple loop
-    + has base width
-    + stem forms center
-    + Filters grow from stars
-      + perform data processing
-** Growth and Lifecycle
-*** Leaf and Lobe Growth
-    + Could be similar
-    + Has base width
-    + Pushes into growth medium
-    + Stem path is important part of lobe growth
-      + leaves can cross lobe boundaries
-    + both could embed and grow?
-
-*** Organ Lifecycle
-    1. Organ stem exists
-    2. Performs bubble allocation
-    3. stem -> kernel
-    4. Grows I/O lines
-    5. Kernel inserts lobe stems
-    6. Kernel inserts leave stems
-    7. Open for business
-    8. Homeostatis
-
-*** Lobe Lifecycle
-    1. Lobe stem exists
-    2. embed self in kernel wall
-    3. perfrom noodle allocation
-    4. Homeostatis
-
-*** Leaf Lifecycle
-    1. Leaf stem exists
-    2. Embeds self in lobe wall
-    3. Performs noodle allocation
-    4. Grows filters
-    5. Homeostatis
-
-** Homeostatis
-*** Allocation
-   + Die if allocation issues found
-   + Stem cells in permanent allocation, constant circulation
-     + Promotes regrowth of failed leaves and lobes
-   + If leave type missing or in short supply, cull population and replace
-     + Determine percentage of each
-     + Dynamically handle % based on input
-       + starving leaves w/constant stem circulation?
-   + Dynamic regulation of stems in kernel
-
-*** Circulation
-    + Kernel has a circular flow
-    + I/O have straight flow
-
-*** Gating
-    Gates change adressing levels? Could leaf data only be valid within organs?
-    Needing a special conversion to be viable on the organ addressing level?
-
-    + Organ ID based
-      + Organ Gate
-        + White-list data
-      + Kernel Gate
-        + WHite list data
-    + Leaf ID Based
-      + Leaf Gate
-        + White-list data
-    + Dynamic
-      + Lobe Gate
-        + Dynamically white-list based on contained leaf IDs
-
-** IDs
-*** Organ IDs
-    + Input data
-    + Output data
-    + Leaf ID distribution
-    + Allocation size
-    + Lobe width and length
-
-*** Leaf ID
-    + Input data
-    + Filters -> Output Data
-    + Width and Length
+   Currently, the event window lookups are restricted to adjacent sites, sites 1 through 4
+   as a HW implementation feasibility measure.
 
 
 * Allocations Types
@@ -203,16 +85,16 @@
 *** Development Process
     Below are propossed development directions that this allocation can be accomplished by.
 
-**** TODO Edge
+**** TODO Edge Idea
      + Build layer by layer by active edge
      + The edge being built changes from cycle to cycle based on open sites
 
-**** TODO Blow Bubbles
+**** TODO Blow Bubbles Idea
      + Using mutliple bubble allocations
      + The centers of each bubble allocation form the path
      + Could have an arc restriction
 
-**** TODO Grow Noodle From Base
+**** TODO Grow Noodle From Base Idea
      + Have forward edge handle collision and bending?
 
 *** Future Work
@@ -222,56 +104,147 @@
     No elements currently exist for this process.
 
 
-* Transportation Layers (Organism)
+* Organization Levels
+  The following are the requirements for organization:
+  + Relative adressing levels
+    + Absolute addressing is not possible
+  + Perform some kind of lifecycle management
+  + Current Levels include:
+    1. Organ Layer
+    2. Lobe Layer
+    3. Leaf Layer
 
-** Active layer
-  + Information moved as an element unit
-  + Move() - Copy an element and delete source , walking
-  + Ingest and Eliminate are special cases, have specified direction (in/out)
-  + actively directed, in/out of or toward suitable destination using logic
+** Heirachical Loop Organization
+   This forms the general organization of an organ.
+   A hierachical loop, where a central loop has a controlled distribution of contents.
+   This distribution is then propogated through adjoining loops, indirectly.
 
-** Passive Layer
-  + Information moved as a density value (solute)
-  + Value is represented in a solvent element
-  + Value is distributed among adjacent solvent elements using rules of diffusion
-  + Dissolve() add to solute density
-  + Precipitate() remove from solute density
-  + Diffuse() move precipitate among solvent elements, zero-sum
-  + Barrier maintain concentration gradients
+*** Organization Summary
 
-** Liminal Layer
-  + Generally, information that is moved from the passive to active layer or vice versa
-  + Secrete() Create a new element, put into active layer
-  + Absorb() Remove an element, take out of active layer
-  + Usually directly related to passive layer, not necessary
-  + conservation of mass/energy is not necessary in this system
-  + Digestion is a special case of absorption to secretion. A transformation of an element
-  + where calculations/processing takes place
+**** Organ
+     + Bubble allocation
+     + Variables
+       + Max Radius
+       + Organ ID
+         + determine leave/stem IDs
 
-** Elements
-  + Agent elements: medium , barrier
-  + target element: data
+**** Lobes (generic)
+     + Path allocation
+     + Variables
+       + base width
+       + max length
 
+**** Leaves
+     + Path allocation
+     + Variables
+       + Base width
+       + max length
+     + Stem ID
+       + Determines filters
 
-* Solute and Signalling
+*** Notes
 
-** Accept Solute
-  Produced by elements that accept a specific data-type
-  Barriers maintain a concentration gradient, only allows diffusion up to a percentage of the higher side
-  This creates nested organs where the each layer has high concentrations, and can be used by
-  intermediator barriers to know the direction data should travel, to areas of high acceptance solute
+**** Organ
+     + Heirachical loop top-level
+     + Primary address level
+     + Has an allocation bubble
+     + Basic I/O ports
+     + Central kernal/node
+       + Connets to lobes and I/O
+     + Lobes have width, determines leaf height
+       + Coil out into avialable space
+       + Fit as many as possible with given width
 
-** Self Identification Solute (ID Solute)
-  Primary purpose if ID Solute is to know where to put waste, maybe ID Solute will be unnecessary if all elements are accepted somewhere?
-  Barriers should be impermeable to self Identification solute, can’t perform pure concentration comparison for ID solute, barrier needs to know what ID it matches with
-  Barrier shall know own ID, and will use medium with matching ID to know inside, outside
-  If a data is not accepted externally by the barrier, it will eliminate it, making the elimination list a black-list
+**** Leaves
+     + Grow within lobe wall
+     + Circulated through system and embed where there is open space
+     + simple loop
+     + has base width
+     + stem forms center
+     + Filters grow from stars
+       + perform data processing
 
-** Barrier
-  + Requires a medium input cell and medium output cell for the barrier to report that it accepts anything
-  + Medium should only point to open barriers
-  + Barrier reads Medium solutes to determine what it accepts, what is the outside, etc.
+*** Growth and Lifecycle
 
-** Ideas
-  + What if barrier have relative internal distance reported by mediums, as it’s acceptance report, could help getting shortest path through multiple barriers? Don’t know what other say, so will end up being absolute??
-  + What about having some weight based on concentration?
+**** Leaf and Lobe Growth
+     + Could be similar
+     + Has base width
+     + Pushes into growth medium
+     + Stem path is important part of lobe growth
+       + leaves can cross lobe boundaries
+     + both could embed and grow?
+
+**** Organ Lifecycle
+     1. Organ stem exists
+     2. Performs bubble allocation
+     3. stem -> kernel
+     4. Grows I/O lines
+     5. Kernel inserts lobe stems
+     6. Kernel inserts leave stems
+     7. Open for business
+     8. Homeostatis
+
+**** Lobe Lifecycle
+     1. Lobe stem exists
+     2. embed self in kernel wall
+     3. perfrom noodle allocation
+     4. Homeostatis
+
+**** Leaf Lifecycle
+     1. Leaf stem exists
+     2. Embeds self in lobe wall
+     3. Performs noodle allocation
+     4. Grows filters
+     5. Homeostatis
+
+*** Homeostatis
+
+**** Allocation
+    + Die if allocation issues found
+    + Stem cells in permanent allocation, constant circulation
+      + Promotes regrowth of failed leaves and lobes
+    + If leave type missing or in short supply, cull population and replace
+      + Determine percentage of each
+      + Dynamically handle % based on input
+        + starving leaves w/constant stem circulation?
+    + Dynamic regulation of stems in kernel
+
+**** Circulation
+     + Kernel has a circular flow
+     + I/O have straight flow
+
+**** Gating
+     Gates change adressing levels? Could leaf data only be valid within organs?
+     Needing a special conversion to be viable on the organ addressing level?
+
+     + Organ ID based
+       + Organ Gate
+         + White-list data
+       + Kernel Gate
+         + WHite list data
+     + Leaf ID Based
+       + Leaf Gate
+         + White-list data
+     + Dynamic
+       + Lobe Gate
+         + Dynamically white-list based on contained leaf IDs
+
+*** IDs
+
+**** Organ IDs
+     + Input data
+     + Output data
+     + Leaf ID distribution
+     + Allocation size
+     + Lobe width and length
+
+**** Leaf ID
+     + Input data
+     + Filters -> Output Data
+     + Width and Length
+
+*** Development
+
+**** TODO Block out heirarchy
+
+**** TODO Implement Path Allocation

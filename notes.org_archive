@@ -1,0 +1,101 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file c:/msys64/home/stsum/repos/ulam-elements/notes.org
+
+
+* Development Process
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-03-26 Sun 17:00
+  :ARCHIVE_FILE: ~/repos/ulam-elements/notes.org
+  :ARCHIVE_OLPATH: Allocations Types/Bubble Allocation
+  :ARCHIVE_CATEGORY: notes
+  :END:
+ The selection process involved multiple development groups, with group 4 being chosen. More details in past commits.
+ + Group 1 :: Crystalline growth, limited by inconsistencies in available area
+ + Group 2 :: Initial amorphous growth attempt, unstable
+ + Group 3 :: Pulsing growth attempt, ran into growth instability, fuse problem
+ + Group 4 :: Based on group 2, with a logic pass-over to improve stability
+
+
+* Development Process
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-03-26 Sun 17:01
+  :ARCHIVE_FILE: ~/repos/ulam-elements/notes.org
+  :ARCHIVE_OLPATH: Allocations Types/Bubble Allocation
+  :ARCHIVE_CATEGORY: notes
+  :END:
+ The selection process involved multiple development groups, with group 4 being chosen. More details in past commits.
+ + Group 1 :: Crystalline growth, limited by inconsistencies in available area
+ + Group 2 :: Initial amorphous growth attempt, unstable
+ + Group 3 :: Pulsing growth attempt, ran into growth instability, fuse problem
+ + Group 4 :: Based on group 2, with a logic pass-over to improve stability
+
+
+Archived entries from file c:/msys64/home/stsum/repos/ulam-elements/notes.org
+
+
+* Transportation Layers (Organism)
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-03-26 Sun 17:57
+  :ARCHIVE_FILE: ~/repos/ulam-elements/notes.org
+  :ARCHIVE_CATEGORY: notes
+  :END:
+
+** Active layer
+  + Information moved as an element unit
+  + Move() - Copy an element and delete source , walking
+  + Ingest and Eliminate are special cases, have specified direction (in/out)
+  + actively directed, in/out of or toward suitable destination using logic
+
+** Passive Layer
+  + Information moved as a density value (solute)
+  + Value is represented in a solvent element
+  + Value is distributed among adjacent solvent elements using rules of diffusion
+  + Dissolve() add to solute density
+  + Precipitate() remove from solute density
+  + Diffuse() move precipitate among solvent elements, zero-sum
+  + Barrier maintain concentration gradients
+
+** Liminal Layer
+  + Generally, information that is moved from the passive to active layer or vice versa
+  + Secrete() Create a new element, put into active layer
+  + Absorb() Remove an element, take out of active layer
+  + Usually directly related to passive layer, not necessary
+  + conservation of mass/energy is not necessary in this system
+  + Digestion is a special case of absorption to secretion. A transformation of an element
+  + where calculations/processing takes place
+
+** Elements
+  + Agent elements: medium , barrier
+  + target element: data
+
+
+
+* Solute and Signalling
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2017-03-26 Sun 17:57
+  :ARCHIVE_FILE: ~/repos/ulam-elements/notes.org
+  :ARCHIVE_CATEGORY: notes
+  :END:
+
+** Accept Solute
+  Produced by elements that accept a specific data-type
+  Barriers maintain a concentration gradient, only allows diffusion up to a percentage of the higher side
+  This creates nested organs where the each layer has high concentrations, and can be used by
+  intermediator barriers to know the direction data should travel, to areas of high acceptance solute
+
+** Self Identification Solute (ID Solute)
+  Primary purpose if ID Solute is to know where to put waste, maybe ID Solute will be unnecessary if all elements are accepted somewhere?
+  Barriers should be impermeable to self Identification solute, can’t perform pure concentration comparison for ID solute, barrier needs to know what ID it matches with
+  Barrier shall know own ID, and will use medium with matching ID to know inside, outside
+  If a data is not accepted externally by the barrier, it will eliminate it, making the elimination list a black-list
+
+** Barrier
+  + Requires a medium input cell and medium output cell for the barrier to report that it accepts anything
+  + Medium should only point to open barriers
+  + Barrier reads Medium solutes to determine what it accepts, what is the outside, etc.
+
+** Ideas
+  + What if barrier have relative internal distance reported by mediums, as it’s acceptance report, could help getting shortest path through multiple barriers? Don’t know what other say, so will end up being absolute??
+  + What about having some weight based on concentration?
