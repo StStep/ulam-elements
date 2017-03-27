@@ -31,15 +31,15 @@
    The chosen bubble allocation process went through multiple development stages.
    The selection process involved multiple development groups, with *Group 4* being chosen. More details in past commits.
 
-**** DONE Group 1
+**** CANCELED Group 1
      CLOSED: [2017-03-26 Sun 17:05]
      Crystalline growth, limited by inconsistencies in available area
 
-**** DONE Group 2
+**** CANCELED Group 2
      CLOSED: [2017-03-26 Sun 17:05]
      Initial amorphous growth attempt, unstable
 
-**** DONE Group 3
+**** CANCELED Group 3
      CLOSED: [2017-03-26 Sun 17:05]
      Pulsing growth attempt, ran into growth instability, fuse problem
 
@@ -85,24 +85,78 @@
 *** Development Process
     Below are proposed development directions that this allocation can be accomplished by.
 
-**** TODO Edge Idea
+**** WAITING Edge Idea
      + Build layer by layer by active edge
      + The edge being built changes from cycle to cycle based on open sites
 
-**** TODO Blow Bubbles Idea
+**** WAITING Blow Bubbles Idea
      + Using multiple bubble allocations
      + The centers of each bubble allocation form the path
      + Could have an arc restriction
      + Bubbles on a chain?
 
-**** TODO Grow Noodle From Base Idea
+**** WAITING Grow Noodle From Base Idea
      + Have forward edge handle collision and bending?
+
+**** IN-PROGRESS Bristled Chain Idea
+     + A chain element goes out with a priority directions.
+     + There are 'bristles' on either side that detect the distance to an obstacle
+     + And it turns based on the distances measured on either side
+     + If the minimum distance is ever met, than the chain element will die
+       + Will marking its direction as bad in its parent chain
+       + If chain under min chain length, then it will retract and try again, making different direction choices
+       + In this way, the chain will crawl backwards when a link dies
+       + Hopefully finding a more optimal path
+     + Could optimize by increasing amount of info kept about bad paths
+     + Variables
+       + Priority Direction
+       + Min bristle distance
+       + Max bristle distance
+       + Max chain length
+       + Min chain length
+       + Bad Direction [4]
+
+***** Logic
+      + Pointing Priority
+        + if d < Max
+          + Turn Away onto not bad non-priority direction
+        + elif d < Min
+          + Die and mark as bad
+        + else
+          + Keep Straight
+      + Else
+        + if d < Max
+          + Go current direction
+        + elif d < Min
+          + Die and mark as bad
+        + else
+          + Return to priority direction
+
+***** Implementation Plan
+
+****** TODO Implement simple single width path
+       Only detects adjacent sites to chain, will detect non-adjacent chains and obstacles
+
+****** TODO Implement bristles, only detect on obstacles
+       Modify detection to be half of width, using new bristle elements
+       Base on bubble centering logic
+
+****** TODO Implement prior path bristles detection by current bristles
+       Detect bristles from previous chains so the path will maximize turning radius and reduce bristle overlap
+
+****** TODO Add in optimization's such as keeping more bad path info
+       Add in logic and more data to allow for path assumptions to reduce dead-end path attempts
 
 *** Future Work
     Not yet implemented
 
 *** Elements
-    No elements currently exist for this process.
+
+**** Path Stem
+
+**** Chain
+
+**** Bristle
 
 
 * Organization Levels
