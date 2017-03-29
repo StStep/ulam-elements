@@ -92,8 +92,9 @@
 **** WAITING Blow Bubbles Idea
      + Using multiple bubble allocations
      + The centers of each bubble allocation form the path
-     + Could have an arc restriction
-     + Bubbles on a chain?
+     + Could have a distance restriction from previous bubble
+     + While trying to separate self from other bubbles
+     + Retracts if previous bubble moves too far away
 
 **** WAITING Grow Noodle From Base Idea
      + Have forward edge handle collision and bending?
