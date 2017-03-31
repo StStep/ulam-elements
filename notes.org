@@ -47,6 +47,14 @@
      CLOSED: [2017-03-26 Sun 17:05]
      Based on group 2, with a logic pass-over to improve stability
 
+**** TODO Even Distribution of Nuclei of same ID
+     + Use barriers between nuclei of same ID
+     + every nucleus/stem have a unique ID separate from type
+     + transparent barriers form between nuclei of the same type
+     + allocations will join up together upon death/finalization
+     + if two of same ID meet, they should merge
+     + emitters transmit through transparent barriers?
+
 *** Future Work
     + [ ] Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
     + [ ] Nucleus auto-centering works with simple organizations, current issues:
@@ -89,12 +97,20 @@
      + Build layer by layer by active edge
      + The edge being built changes from cycle to cycle based on open sites
 
-**** WAITING Blow Bubbles Idea
+**** TODO Blow Bubbles Idea
      + Using multiple bubble allocations
      + The centers of each bubble allocation form the path
      + Could have a distance restriction from previous bubble
      + While trying to separate self from other bubbles
      + Retracts if previous bubble moves too far away
+     + Use transparent barriers and exciters to track nuclei separation
+     + Variables
+       + N :: number of bubbles
+       + W :: Width of path
+     + Path length ~ W(N/4 + 1/2)
+     + Bubble radius ~ W/2
+     + Bubble separation ~ W/4
+
 
 **** WAITING Grow Noodle From Base Idea
      + Have forward edge handle collision and bending?
