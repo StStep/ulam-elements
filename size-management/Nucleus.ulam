@@ -64,6 +64,7 @@ element Nucleus
     {
         Cytoplasm c;
         c.nId = nId;
+        c.iId = iId;
         c.dist = maxDist;
         ew[site] = c;
     }
@@ -71,6 +72,7 @@ element Nucleus
     Void excite(SiteNum site, Cytoplasm c)
     {
         c.nId = nId;
+        c.iId = iId;
         c.dist = maxDist;
         ew[site] = c;
     }

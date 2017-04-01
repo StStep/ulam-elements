@@ -28,6 +28,7 @@ element Cytoplasm
 
     // Data members
     ID nId;
+    ID iId;
     Dist dist; // The distance from the nucleas
     Dist room[4];
 
@@ -81,6 +82,7 @@ element Cytoplasm
     {
         Cytoplasm c;
         c.nId = nId;
+        c.iId = iId;
         c.dist = (Dist) (dist - 1);
         ew[site] = c;
     }
@@ -102,7 +104,7 @@ element Cytoplasm
             if(a is Cytoplasm)
             {
                 Cytoplasm neig = (Cytoplasm) a;
-                if(neig.nId != nId)
+                if((neig.nId != nId) || (neig.iId != iId))
                 {
                     harden();
                 }
@@ -172,7 +174,7 @@ element Cytoplasm
             else if(a is Nucleus)
             {
                 Nucleus neig = (Nucleus) a;
-                if(neig.nId != nId)
+                if((neig.nId != nId) || (neig.iId != iId))
                 {
                     harden();
                 }

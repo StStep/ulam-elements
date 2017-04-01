@@ -27,6 +27,27 @@ element Membrane
     parameter Dist conFlex = 2;
 
     // Data members
+    Bool trans = false;
+
+    /**
+     * Hard-coded color options for debugging with
+     * trans and not trans
+     */
+    ARGB getColor(Unsigned selector)
+    {
+        ColorUtils cu;
+        ARGB ret;
+        if(trans)
+        {
+            ret = cu.color(0xA0,0xA0,0);
+        }
+        else
+        {
+            ret = cu.color(0xFF,0,0);
+        }
+
+        return ret;
+    }
 
     Void die()
     {
@@ -34,10 +55,11 @@ element Membrane
         ew[0] = e;
     }
 
-    Void dissolve(ID nId)
+    Void dissolve(ID nId, ID iId)
     {
         Cytoplasm c;
         c.nId = nId;
+        c.iId = iId;
         c.dist = 0;
         ew[0] = c;
     }
@@ -49,11 +71,13 @@ element Membrane
     {
         // Loop through neighbors
         Bool goodNeig = false;
+        Bool iTrans = false;
         Bool contention = false;
         Bool unknown = false;
         Bool weakFriend = false;
         Bool neutral = false;
         ID lastId = 0;
+        ID lastiId = 0;
         Dist minDist = Dist.maxof;
         SiteNum minLoc = 0;
         Dist maxDist = Dist.minof;
@@ -79,9 +103,15 @@ element Membrane
                 if(lastId == 0)
                 {
                     lastId = neig.nId;
+                    lastiId = neig.iId;
                 }
                 else if(lastId != neig.nId)
                 {
+                    contention = true;
+                }
+                else if(lastiId != neig.iId)
+                {
+                    iTrans = true;
                     contention = true;
                 }
                 else
@@ -121,12 +151,13 @@ element Membrane
             }
         }
 
+        trans = false;
         // Die if no cyto
         if(!goodNeig)
         {
             die();
         }
-        // Else if unknwon stay
+        // Else if unknown stay
         else if(unknown)
         {
             // Stay put
@@ -143,15 +174,17 @@ element Membrane
             {
                 ew[minLoc] = self;
             }
+            trans = iTrans;
         }
         // Else disolve if all strong friends and no nuetral or surrounded by friends
         else if(!neutral || !weakFriend || (goodCnt >= 3))
         {
-            dissolve(lastId);
+            dissolve(lastId, lastiId);
         }
         else
         {
             // Do nothing
         }
+
     }
 }
