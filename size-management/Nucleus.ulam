@@ -15,6 +15,8 @@ element Nucleus
     typedef Unsigned(6) ID;
     typedef Unsigned(4) Inst;
     typedef Unsigned(6) Dist;
+    typedef CMap.Key Key;
+    typedef CMap.Value Value;
     typedef EventWindow.SiteNum SiteNum;
     typedef EventWindow.Symmetry Symmetry;
 
@@ -68,7 +70,7 @@ element Nucleus
         c.iId = iId;
         c.dist = maxDist;
         c.instMap.empty();
-        // TODO excite
+        c.instMap.add((Key) iId, (Value) Value.maxof);
         ew[site] = c;
     }
 
@@ -78,7 +80,7 @@ element Nucleus
         c.iId = iId;
         c.dist = maxDist;
         c.instMap.empty();
-        // TODO excite
+        c.instMap.add((Key) iId, (Value) Value.maxof);
         ew[site] = c;
     }
 
