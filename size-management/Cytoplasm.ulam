@@ -76,12 +76,14 @@ element Cytoplasm
     Void harden()
     {
         Membrane m;
+        m.instMap.empty();
         ew[0] = m;
     }
 
     Void hardenOut(SiteNum site)
     {
         Membrane m;
+        m.instMap.empty();
         ew[site] = m;
     }
 
@@ -97,6 +99,8 @@ element Cytoplasm
         c.nId = nId;
         c.iId = iId;
         c.dist = (Dist) (dist - 1);
+        c.instMap.setTo(instMap);
+        c.instMap.modify(-1);
         ew[site] = c;
     }
 
@@ -107,7 +111,8 @@ element Cytoplasm
     {
         // Setup temp map
         Dist maxDist = dist;
-        CMap tmpMap = instMap;
+        CMap tmpMap;
+        tmpMap.setTo(instMap);
 
         // Loop through neighbors
         for(SiteNum site = 1; site <= 4; ++site)
@@ -224,7 +229,7 @@ element Cytoplasm
         else
         {
             dist = maxDist;
-            instMap = tmpMap;
+            instMap.setTo(tmpMap);
         }
 
     }

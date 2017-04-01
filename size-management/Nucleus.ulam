@@ -67,6 +67,8 @@ element Nucleus
         c.nId = nId;
         c.iId = iId;
         c.dist = maxDist;
+        c.instMap.empty();
+        // TODO excite
         ew[site] = c;
     }
 
@@ -75,6 +77,8 @@ element Nucleus
         c.nId = nId;
         c.iId = iId;
         c.dist = maxDist;
+        c.instMap.empty();
+        // TODO excite
         ew[site] = c;
     }
 

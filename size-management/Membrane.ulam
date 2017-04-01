@@ -63,6 +63,7 @@ element Membrane
         c.nId = nId;
         c.iId = iId;
         c.dist = 0;
+        c.instMap.empty();
         ew[0] = c;
     }
 
@@ -85,7 +86,8 @@ element Membrane
         SiteNum minLoc = 0;
         Dist maxDist = Dist.minof;
         Unsigned(3) goodCnt = 0;
-        CMap tmpMap = instMap; // 30 bits
+        CMap tmpMap; // 30 bits
+        tmpMap.setTo(instMap);
         for(SiteNum site = 1; site <= 4; ++site)
         {
             Atom a = ew[site];
@@ -203,8 +205,8 @@ element Membrane
         }
         else
         {
-            tmpMap.modify(-1); // todo reset
+            tmpMap.empty();
         }
-        instMap = tmpMap;
+        instMap.setTo(tmpMap);
     }
 }

@@ -234,6 +234,34 @@ quark MapT(Unsigned k, Unsigned v, Unsigned n)
             }
         }
     }
+
+    /**
+     * This function empties the map by setting all keys to zero.
+     */
+    Void empty()
+    {
+        for(Int i = 0; i < n; ++i)
+        {
+            mVals[i] = (Value) 0;
+        }
+    }
+
+    /**
+     * This function makes the map the copy of another map.
+     */
+    Void setTo(MapT(k, v, n) compMap)
+    {
+        empty();
+        for(Int i = 0; i < n; ++i)
+        {
+            Key newK = compMap.mKeys[i];
+            // If sentinal, break
+            if(newK == 0)
+                break;
+            Value newV = compMap.mVals[i];
+            add(newK, newV);
+        }
+    }
 }
 
 /**
@@ -245,4 +273,3 @@ quark Map : MapT(3, 7, 3)
     typedef MapT(3, 7, 3).Key Key;
     typedef MapT(3, 7, 3).Value Value;
 }
-
