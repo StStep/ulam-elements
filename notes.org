@@ -47,7 +47,8 @@
      CLOSED: [2017-03-26 Sun 17:05]
      Based on group 2, with a logic pass-over to improve stability
 
-**** TODO Even Distribution of Nuclei of same ID
+**** DONE Even Distribution of Nuclei of same ID
+     CLOSED: [2017-03-31 Fri 21:35]
      + Use barriers between nuclei of same ID
      + every nucleus/stem have a unique ID separate from type
      + transparent barriers form between nuclei of the same type
@@ -59,7 +60,6 @@
     + [ ] Currently, Cytoplasm based distance measuring means internal non-Cytoplasm elements will alter the overall shape of the allocated space
     + [ ] Nucleus auto-centering works with simple organizations, current issues:
       + Edges of world are preferable to auto-center, going to expect edges to exist for now
-      + Nuclei of the same ID clump, making multiple ID Nuclei less effective, and limits ID coverage. Maybe this is okay
 
 *** Elements
     The following elements make up the bubble allocation process.
