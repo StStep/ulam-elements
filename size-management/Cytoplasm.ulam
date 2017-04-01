@@ -27,7 +27,7 @@ element Cytoplasm
     parameter Dist deadLim = 1;
 
     // Data members
-    ID id;
+    ID nId;
     Dist dist; // The distance from the nucleas
     Dist room[4];
 
@@ -39,15 +39,15 @@ element Cytoplasm
     {
         ColorUtils cu;
         ARGB ret;
-        if(id == 1)
+        if(nId == 1)
         {
             ret = cu.color(2,2,0xFF);
         }
-        else if(id == 2)
+        else if(nId == 2)
         {
             ret = cu.color(2,0x60,0xFF);
         }
-        else if(id == 3)
+        else if(nId == 3)
         {
             ret = cu.color(0x30,2,0xFF);
         }
@@ -80,7 +80,7 @@ element Cytoplasm
     Void spread(SiteNum site)
     {
         Cytoplasm c;
-        c.id = id;
+        c.nId = nId;
         c.dist = (Dist) (dist - 1);
         ew[site] = c;
     }
@@ -102,7 +102,7 @@ element Cytoplasm
             if(a is Cytoplasm)
             {
                 Cytoplasm neig = (Cytoplasm) a;
-                if(neig.id != id)
+                if(neig.nId != nId)
                 {
                     harden();
                 }
@@ -172,7 +172,7 @@ element Cytoplasm
             else if(a is Nucleus)
             {
                 Nucleus neig = (Nucleus) a;
-                if(neig.id != id)
+                if(neig.nId != nId)
                 {
                     harden();
                 }

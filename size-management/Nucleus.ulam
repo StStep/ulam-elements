@@ -25,7 +25,9 @@ element Nucleus
     parameter Unsigned(6) stableMinCycle = 30;
 
     // Data members
-    ID id = 1;
+    ID nId = 1; // Nucleus ID, unique per type
+    ID iId = 1; // Instance ID, unique per instance
+
     Bool stable;
     Unsigned(6) stabCount;
 
@@ -57,14 +59,14 @@ element Nucleus
     Void spread(SiteNum site)
     {
         Cytoplasm c;
-        c.id = id;
+        c.nId = nId;
         c.dist = maxDist;
         ew[site] = c;
     }
 
     Void excite(SiteNum site, Cytoplasm c)
     {
-        c.id = id;
+        c.nId = nId;
         c.dist = maxDist;
         ew[site] = c;
     }
@@ -119,7 +121,7 @@ element Nucleus
             else if(a is Nucleus)
             {
                 Nucleus n = (Nucleus) a;
-                if(n.id != id)
+                if(n.nId != nId)
                 {
                     die();
                 }
@@ -236,7 +238,7 @@ element NucleusB
     Void behave()
     {
         Nucleus n;
-        n.id = 2;
+        n.nId = 2;
         ew[0] = n;
     }
 }
@@ -261,7 +263,7 @@ element NucleusC
     Void behave()
     {
         Nucleus n;
-        n.id = 3;
+        n.nId = 3;
         ew[0] = n;
     }
 }

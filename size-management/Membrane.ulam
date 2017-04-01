@@ -34,10 +34,10 @@ element Membrane
         ew[0] = e;
     }
 
-    Void dissolve(ID id)
+    Void dissolve(ID nId)
     {
         Cytoplasm c;
-        c.id = id;
+        c.nId = nId;
         c.dist = 0;
         ew[0] = c;
     }
@@ -78,9 +78,9 @@ element Membrane
                 // Check for contention
                 if(lastId == 0)
                 {
-                    lastId = neig.id;
+                    lastId = neig.nId;
                 }
-                else if(lastId != neig.id)
+                else if(lastId != neig.nId)
                 {
                     contention = true;
                 }
