@@ -186,10 +186,10 @@ element Membrane
 
             if(!unfriendlyContention)
             {
-                trans = iTrans;
+                //trans = iTrans;
             }
         }
-        // Else disolve if all strong friends and no nuetral or surrounded by friends
+        // Else dissolve if all strong friends and no nuetral or surrounded by friends
         else if(!neutral || !weakFriend || (goodCnt >= 3))
         {
             dissolve(lastId, lastiId);
@@ -207,6 +207,7 @@ element Membrane
         {
             tmpMap.empty();
         }
-        instMap.setTo(tmpMap);
+        //instMap.setTo(tmpMap);
+        instMap.mKeys[0] = 0; // Setting 1 or 2 crashes Membrane
     }
 }

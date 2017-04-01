@@ -242,6 +242,7 @@ quark MapT(Unsigned k, Unsigned v, Unsigned n)
     {
         for(Int i = 0; i < n; ++i)
         {
+            mKeys[i] = (Key) 0;
             mVals[i] = (Value) 0;
         }
     }
