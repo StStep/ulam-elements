@@ -27,8 +27,6 @@ element Cytoplasm
     typedef Nucleus.ID ID;
     typedef Nucleus.Inst Inst;
     typedef Nucleus.Dist Dist;
-    typedef CMap.Key Key;
-    typedef CMap.Value Dist;
     typedef EventWindow.SiteNum SiteNum;
 
     // Utilities
@@ -45,7 +43,7 @@ element Cytoplasm
     Inst iId; // 4 bits
     Dist dist; // The distance from the nucleus, 6 bits
     Dist room[4]; // 6 * 4 = 24 bits
-    CMap nucDist; // 30 bits
+    CMap instMap; // 30 bits
 
     /**
      * Hard-coded color options for debugging with
@@ -109,6 +107,7 @@ element Cytoplasm
     {
         // Setup temp map
         Dist maxDist = dist;
+        CMap tmpMap = instMap;
 
         // Loop through neighbors
         for(SiteNum site = 1; site <= 4; ++site)
@@ -125,6 +124,8 @@ element Cytoplasm
                 }
                 else
                 {
+                    tmpMap.setMax(neig.instMap);
+
                     if(neig.dist > maxDist)
                     {
                         maxDist = neig.dist;
@@ -168,6 +169,7 @@ element Cytoplasm
             // If membrane, calc room
             else if(a is Membrane)
             {
+                Membrane neig = (Membrane) a;
                 if(site == 1)
                 {
                     room[3] = Dist.maxof;
@@ -184,6 +186,11 @@ element Cytoplasm
                 else
                 {
                     room[0] = Dist.maxof;
+                }
+
+                if(neig.trans)
+                {
+                    tmpMap.setMax(neig.instMap);
                 }
             }
             else if(a is Nucleus)
@@ -202,6 +209,7 @@ element Cytoplasm
         }
 
         // Decay and set
+        tmpMap.modify(-1);
         --maxDist;
         for(Int i = 0; i < 4; ++i)
         {
@@ -216,6 +224,7 @@ element Cytoplasm
         else
         {
             dist = maxDist;
+            instMap = tmpMap;
         }
 
     }

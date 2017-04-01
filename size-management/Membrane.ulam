@@ -29,6 +29,7 @@ element Membrane
 
     // Data members
     Bool trans = false;
+    CMap instMap; // 30 bits
 
     /**
      * Hard-coded color options for debugging with
@@ -84,6 +85,7 @@ element Membrane
         SiteNum minLoc = 0;
         Dist maxDist = Dist.minof;
         Unsigned(3) goodCnt = 0;
+        CMap tmpMap = instMap; // 30 bits
         for(SiteNum site = 1; site <= 4; ++site)
         {
             Atom a = ew[site];
@@ -106,6 +108,7 @@ element Membrane
                 {
                     lastId = neig.nId;
                     lastiId = neig.iId;
+                    tmpMap.setMax(neig.instMap);
                 }
                 else if(lastId != neig.nId)
                 {
@@ -116,6 +119,7 @@ element Membrane
                 {
                     iTrans = true;
                     contention = true;
+                    tmpMap.setMax(neig.instMap);
                 }
                 else
                 {
@@ -193,5 +197,14 @@ element Membrane
             // Do nothing
         }
 
+        if(trans)
+        {
+            tmpMap.modify(-1);
+        }
+        else
+        {
+            tmpMap.modify(-1); // todo reset
+        }
+        instMap = tmpMap;
     }
 }
