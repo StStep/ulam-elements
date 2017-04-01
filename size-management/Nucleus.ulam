@@ -127,14 +127,10 @@ element Nucleus
             {
                 ++memNeig;
             }
-            // Die if foriegn nuclei
+            // Die if adjacent nuclei
             else if(a is Nucleus)
             {
-                Nucleus n = (Nucleus) a;
-                if(n.nId != nId)
-                {
-                    die();
-                }
+                die();
             }
             // Else die if unknown
             else
