@@ -14,6 +14,7 @@ element Membrane
 
     // Types
     typedef Nucleus.ID ID;
+    typedef Nucleus.Inst Inst;
     typedef Nucleus.Dist Dist;
     typedef EventWindow.SiteNum SiteNum;
 
@@ -55,7 +56,7 @@ element Membrane
         ew[0] = e;
     }
 
-    Void dissolve(ID nId, ID iId)
+    Void dissolve(ID nId, Inst iId)
     {
         Cytoplasm c;
         c.nId = nId;
@@ -78,7 +79,7 @@ element Membrane
         Bool weakFriend = false;
         Bool neutral = false;
         ID lastId = 0;
-        ID lastiId = 0;
+        Inst lastiId = 0;
         Dist minDist = Dist.maxof;
         SiteNum minLoc = 0;
         Dist maxDist = Dist.minof;

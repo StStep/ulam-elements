@@ -14,6 +14,7 @@ element Cytoplasm
 {
     // Types
     typedef Nucleus.ID ID;
+    typedef Nucleus.Inst Inst;
     typedef Nucleus.Dist Dist;
     typedef EventWindow.SiteNum SiteNum;
 
@@ -28,7 +29,7 @@ element Cytoplasm
 
     // Data members
     ID nId;
-    ID iId;
+    Inst iId;
     Dist dist; // The distance from the nucleas
     Dist room[4];
 

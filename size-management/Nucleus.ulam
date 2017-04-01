@@ -13,6 +13,7 @@ element Nucleus
 {
     // Types
     typedef Unsigned(6) ID;
+    typedef Unsigned(6) Inst;
     typedef Unsigned(6) Dist;
     typedef EventWindow.SiteNum SiteNum;
     typedef EventWindow.Symmetry Symmetry;
@@ -29,7 +30,7 @@ element Nucleus
 
     // Data members
     ID nId = 1; // Nucleus ID, unique per type
-    ID iId = 0; // Instance ID, unique per instance
+    Inst iId = 0; // Instance ID, unique per instance
 
     Once mOnce;
     Bool stable;
@@ -85,7 +86,7 @@ element Nucleus
         // Run Once
         if(mOnce.new())
         {
-            iId = (ID) rand.between(0,63);
+            iId = (Inst) rand.between(0,Inst.maxof);
         }
 
         // Loop through neighbors
