@@ -72,6 +72,7 @@ element Membrane
         // Loop through neighbors
         Bool goodNeig = false;
         Bool iTrans = false;
+        Bool unfriendlyContention = false;
         Bool contention = false;
         Bool unknown = false;
         Bool weakFriend = false;
@@ -108,6 +109,7 @@ element Membrane
                 else if(lastId != neig.nId)
                 {
                     contention = true;
+                    unfriendlyContention = true;
                 }
                 else if(lastiId != neig.iId)
                 {
@@ -174,7 +176,11 @@ element Membrane
             {
                 ew[minLoc] = self;
             }
-            trans = iTrans;
+
+            if(!unfriendlyContention)
+            {
+                trans = iTrans;
+            }
         }
         // Else disolve if all strong friends and no nuetral or surrounded by friends
         else if(!neutral || !weakFriend || (goodCnt >= 3))
