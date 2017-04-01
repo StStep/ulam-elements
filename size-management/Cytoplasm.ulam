@@ -1,4 +1,15 @@
 /**
+ * A cytoplasm map  Space cost: 30 bits
+ * \sa MapT
+ */
+quark CMap : MapT(4, 6, 3)
+{
+    typedef MapT(4, 6, 3).Key Key;
+    typedef MapT(4, 6, 3).Value Value;
+}
+
+
+/**
  * Cytoplasm is a size management element
  * \color #22f
  * \symbol Cy
@@ -16,6 +27,8 @@ element Cytoplasm
     typedef Nucleus.ID ID;
     typedef Nucleus.Inst Inst;
     typedef Nucleus.Dist Dist;
+    typedef CMap.Key Key;
+    typedef CMap.Value Dist;
     typedef EventWindow.SiteNum SiteNum;
 
     // Utilities
@@ -27,11 +40,12 @@ element Cytoplasm
     /** The dist thresh where cyto dies, 0 disables */
     parameter Dist deadLim = 1;
 
-    // Data members
-    ID nId;
-    Inst iId;
-    Dist dist; // The distance from the nucleas
-    Dist room[4];
+    // Data members (Using 70 of 71 bits)
+    ID nId; // 6 bits
+    Inst iId; // 4 bits
+    Dist dist; // The distance from the nucleus, 6 bits
+    Dist room[4]; // 6 * 4 = 24 bits
+    CMap nucDist; // 30 bits
 
     /**
      * Hard-coded color options for debugging with

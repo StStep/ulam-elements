@@ -13,7 +13,7 @@ element Nucleus
 {
     // Types
     typedef Unsigned(6) ID;
-    typedef Unsigned(6) Inst;
+    typedef Unsigned(4) Inst;
     typedef Unsigned(6) Dist;
     typedef EventWindow.SiteNum SiteNum;
     typedef EventWindow.Symmetry Symmetry;
