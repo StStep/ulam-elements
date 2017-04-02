@@ -186,7 +186,7 @@ element Membrane
 
             if(!unfriendlyContention)
             {
-                //trans = iTrans;
+                trans = iTrans;
             }
         }
         // Else dissolve if all strong friends and no nuetral or surrounded by friends
@@ -208,6 +208,6 @@ element Membrane
             tmpMap.empty();
         }
         //instMap.setTo(tmpMap);
-        instMap.mKeys[0] = 0; // Setting 1 or 2 crashes Membrane
+        //instMap.mKeys[0] = 0; // Setting 1 or 2 crashes Membrane
     }
 }
