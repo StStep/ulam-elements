@@ -100,6 +100,34 @@ quark MapT(Unsigned k, Unsigned v, Unsigned n)
     }
 
     /**
+     * Get the value for a given key, a value of 0 will be returned when none is found
+     */
+    Value getV(Key key)
+    {
+        Value ret = 0;
+        for(Int i = 0; i < n; ++i)
+        {
+            // If sentinal, break
+            if(mKeys[i] == 0)
+            {
+                break;
+            }
+            // Else if match, set value and break
+            else if(mKeys[i] == key)
+            {
+                ret = mVals[i];
+                break;
+            }
+            // Else not-match
+            {
+                // Do nothing
+            }
+        }
+
+        return ret;
+    }
+
+    /**
      * Remove a given key from the map if it exists
      */
     Void remove(Key key)
@@ -233,6 +261,37 @@ quark MapT(Unsigned k, Unsigned v, Unsigned n)
                 // Do nothing
             }
         }
+    }
+
+    Void setMaxKV(Key pKey, Value pVal)
+    {
+        Value curVal = getV(pKey);
+        if(pVal > curVal)
+        {
+            add(pKey, pVal);
+        }
+    }
+
+    /**
+     * Returns the KEY of the entry with the largest value.
+     */
+    Key getMaxK()
+    {
+        Key retK = 0;
+        Value maxVal = 0;
+        for(Int i = 0; i < n; ++i)
+        {
+            Key newK = mKeys[i];
+            Value newV = mVals[i];
+            if(newK == 0)
+                break;
+            if(newV > maxVal)
+            {
+                maxVal = newV;
+                retK = newK;
+            }
+        }
+        return retK;
     }
 
     /**
