@@ -140,11 +140,13 @@ element Nucleus
             else if(a is Nucleus)
             {
                 die();
+                return;
             }
             // Else die if unknown
             else
             {
                die();
+               return;
             }
         }
 
@@ -152,6 +154,7 @@ element Nucleus
         if(memNeig > 3)
         {
             die();
+            return;
         }
 
         // Move to optimize room

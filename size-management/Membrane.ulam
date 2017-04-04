@@ -165,6 +165,7 @@ element Membrane
         if(!goodNeig)
         {
             die();
+            return;
         }
         // Else if unknown stay
         else if(unknown)
@@ -182,6 +183,8 @@ element Membrane
             else
             {
                 ew[minLoc] = self;
+                die();
+                return;
             }
 
             if(!unfriendlyContention)
@@ -193,6 +196,7 @@ element Membrane
         else if(!neutral || !weakFriend || (goodCnt >= 3))
         {
             dissolve(lastId, lastiId);
+            return;
         }
         else
         {
@@ -207,7 +211,6 @@ element Membrane
         {
             tmpMap.empty();
         }
-        //instMap.setTo(tmpMap);
-        //instMap.mKeys[0] = 0; // Setting 1 or 2 crashes Membrane
+        instMap.setTo(tmpMap);
     }
 }

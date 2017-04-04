@@ -126,6 +126,7 @@ element Cytoplasm
                 if((neig.nId != nId) || (neig.iId != iId))
                 {
                     harden();
+                    return;
                 }
                 else
                 {
@@ -204,12 +205,14 @@ element Cytoplasm
                 if((neig.nId != nId) || (neig.iId != iId))
                 {
                     harden();
+                    return;
                 }
             }
             // Else become membrane if unknown
             else
             {
                 harden();
+                return;
             }
         }
 
@@ -225,6 +228,7 @@ element Cytoplasm
         if(maxDist < deadLim)
         {
             die();
+            return;
         }
         else
         {
