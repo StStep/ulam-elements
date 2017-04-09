@@ -24,6 +24,7 @@ element Nucleus
 
     // Utilities
     EventWindow ew;
+    AtomUtils au;
     Random rand;
 
     // Model Parameters
@@ -93,7 +94,6 @@ element Nucleus
     {
         WindowScanner ws;
         SiteVisitorByType sv;
-        AtomUtils au;
         Empty e;
         Cytoplasm c;
         Nucleus n;
@@ -137,9 +137,16 @@ element Nucleus
         ws.scan(sv, 1,4);
 
         // Die if neighbor unknown or nucleus or membrane > 3
-        if (((Unsigned) 0 != ws.getHits(nucleusSI)) || ((Unsigned) 3 < ws.getHits(membraneSI))) {
+        if (((Unsigned) 0 != ws.getHits(nucleusSI)) || ((Unsigned) 3 < ws.getHits(membraneSI)))
+        {
             die();
             return;
+        }
+
+        // Spread to empty TODO Add Medium
+        if((Unsigned) 0 != ws.getHits(emptySI))
+        {
+            spread(ws.getSiteNum(emptySI));
         }
 
         // Loop through neighbors
@@ -147,14 +154,9 @@ element Nucleus
         Bool safe[4];
         for(SiteNum site = 1; site <= 4; ++site)
         {
-            // If Empty or Medium, spread
             Atom a = ew[site];
-            if((a is Empty) || (a is Medium))
-            {
-                spread(site);
-            }
             // If cytoplasm, excite
-            else if(a is Cytoplasm)
+            if(a is Cytoplasm)
             {
                 safe[site - 1] = true;
                 Cytoplasm c = (Cytoplasm) a;
@@ -176,9 +178,6 @@ element Nucleus
                 {
                     room[0] = c.room[0];
                 }
-            }
-            else {
-                ;
             }
         }
 
