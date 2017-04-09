@@ -18,7 +18,7 @@
    + Deal gracefully with inconsistencies in shape of available space
    + Kill allocation process if unfeasible
 
-*** Demos
+   Demos:
    + [ULAM - Bubble Allocation Demo](https://www.youtube.com/watch?v=diiUx5CkXa4)
 
 ** Bubble Allocation
