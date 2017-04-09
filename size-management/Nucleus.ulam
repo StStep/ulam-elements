@@ -19,6 +19,8 @@ element Nucleus
     typedef CMap.Value Value;
     typedef EventWindow.SiteNum SiteNum;
     typedef EventWindow.Symmetry Symmetry;
+    typedef SiteVisitorByType.ElementType ElementType;
+    typedef WindowScanner.Category Category;
 
     // Utilities
     EventWindow ew;
@@ -89,14 +91,58 @@ element Nucleus
      */
     Void behave()
     {
+        WindowScanner ws;
+        SiteVisitorByType sv;
+        AtomUtils au;
+        Empty e;
+        Cytoplasm c;
+        Nucleus n;
+        Membrane m;
+        Medium me;
+
+        typedef WindowScanner.Category Category;
+        constant Category emptySI = 0;    // scan index for empties
+        constant Category cytoSI = 1;   // scan index for cytoplasm
+        constant Category mediumSI = 2;   // scan index for medium
+        constant Category membraneSI = 3;   // scan index for membrane
+        constant Category nucleusSI = 4;   // scan index for nucleus
+        constant Category nonempSI = 5;     // scan index for non-empty unknowns
+
+        ElementType emptyT = (ElementType) au.getType((Atom) e);
+        ElementType cytoT = (ElementType) au.getType((Atom) c);
+        ElementType mediumT = (ElementType) au.getType((Atom) me);
+        ElementType membraneT = (ElementType) au.getType((Atom) m);
+        ElementType nucleusT = (ElementType) au.getType((Atom) n);
+        //ElementType nonempT = (ElementType) ws.cNONEMPTY_SITES_HIT; // TODO Add support for unknowns
+
         // Run Once
         if(mOnce.new())
         {
             iId = (Inst) rand.between(0,Inst.maxof);
         }
 
+        sv.reset();
+        sv.setType(emptySI, emptyT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(cytoSI, cytoT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(mediumSI, mediumT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(membraneSI, membraneT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(nucleusSI, nucleusT);
+        ws.allocateCategory(); // TODO Put this in sv
+        //sv.setType(nonempSI, nonempT);
+
+        ws.scan(sv, 1,4);
+
+        // Die if neighbor unknown or nucleus or membrane > 3
+        if (((Unsigned) 0 != ws.getHits(nucleusSI)) || ((Unsigned) 3 < ws.getHits(membraneSI))) {
+            die();
+            return;
+        }
+
         // Loop through neighbors
-        Unsigned(3) memNeig = 0;
         Dist room[4];
         Bool safe[4];
         for(SiteNum site = 1; site <= 4; ++site)
@@ -131,30 +177,9 @@ element Nucleus
                     room[0] = c.room[0];
                 }
             }
-            // Count surrounding membranes
-            else if(a is Membrane)
-            {
-                ++memNeig;
+            else {
+                ;
             }
-            // Die if adjacent nuclei
-            else if(a is Nucleus)
-            {
-                die();
-                return;
-            }
-            // Else die if unknown
-            else
-            {
-               die();
-               return;
-            }
-        }
-
-        // Die if surrounded by membrane
-        if(memNeig > 3)
-        {
-            die();
-            return;
         }
 
         // Move to optimize room
