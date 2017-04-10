@@ -186,6 +186,8 @@ element Nucleus
         // Move left/right
         if(isLarge && (udAbs < lrAbs))
         {
+            --stabCount;
+            stable = false;
             // Move right
             if(lrDisp > 0)
             {
@@ -205,12 +207,12 @@ element Nucleus
                     return;
                 }
             }
-            --stabCount;
-            stable = false;
         }
         // Move up/down
         else if(isLarge)
         {
+            --stabCount;
+            stable = false;
             // Move Down
             if(udDisp > 0)
             {
@@ -229,8 +231,6 @@ element Nucleus
                     return;
                 }
             }
-            --stabCount;
-            stable = false;
         }
         // Count stable cycles
         else
