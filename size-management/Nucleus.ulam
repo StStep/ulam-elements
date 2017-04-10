@@ -96,7 +96,7 @@ element Nucleus
     Void behave()
     {
         WindowScanner ws;
-        SiteVisitorByType sv;
+        SiteVisitorByType sv; // TODO Make cyto focused class, can do more with it, less boilerplate
         Empty e;
         Cytoplasm c;
         Nucleus n;
