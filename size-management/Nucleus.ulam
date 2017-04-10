@@ -158,6 +158,24 @@ element Nucleus
             site = ws.getSiteNum(cytoSI);
             Cytoplasm c = (Cytoplasm) ew[site];
             Dist room = 0;//c.room;
+            if(site == 1)
+            {
+                room = c.room[3];
+            }
+            else if(site == 2)
+            {
+                room = c.room[2];
+            }
+            else if(site == 3)
+            {
+                room = c.room[1];
+            }
+            // Site == 4
+            else
+            {
+                room = c.room[0];
+            }
+
             if(room > lastRoom)
             {
                 roomDiff = (Dist) (room - lastRoom);
@@ -171,7 +189,7 @@ element Nucleus
         {
             --stabCount;
             stable = false;
-            //ew.swap(0, site);
+            ew.swap(0, site);
             return;
         }
         // Else count stable cycles
