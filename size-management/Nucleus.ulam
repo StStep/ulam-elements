@@ -67,12 +67,13 @@ element Nucleus
 
     Void spawnLink(SiteNum site)
     {
-        if (nId == 1)
+        if (iId == 1)
             return;
         Nucleus n;
         n.nId = nId;
         n.iId = (Inst) (iId - 1);
         n.isChain = true;
+        n.isBase = false;
         ew[site] = n;
     }
 
@@ -142,7 +143,7 @@ element Nucleus
                 }
 
                 // Check for child if iId > 1
-                if(nId > 1) {
+                if(iId > 1) {
                     Value cd = c.instMap.getV((Key)(iId - 1));
                     if(cd != 0) {
                         seeChild = true;
@@ -214,12 +215,14 @@ element Nucleus
                 spawnLink(childDir);
             }
 
-            // Move toward parent if out of range
-            Value calcRange = (Value) Value.maxof;
-            calcRange = (Value) (calcRange - parentDist);
-            if(calcRange > maxDist/2) {
-                ew.swap(0, parentDir);
-                return;
+            if(!isBase) {
+                // Move toward parent if out of range
+                Value calcRange = (Value) Value.maxof;
+                calcRange = (Value) (calcRange - parentDist);
+                if(calcRange > maxDist/2) {
+                    ew.swap(0, parentDir);
+                    return;
+                }
             }
         }
 
