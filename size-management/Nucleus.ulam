@@ -38,8 +38,9 @@ element Nucleus
     Inst iId = 0; // Instance ID, unique per instance
 
     Once mOnce;
-    Bool stable;
-    Unsigned(6) stabCount;
+    Bool stable = false;
+    Dist lastRoom = 0;
+    Unsigned(6) stabCount = 0;
 
     /**
      * Hard-coded color options for debugging with
@@ -134,7 +135,7 @@ element Nucleus
         ws.allocateCategory(); // TODO Put this in sv
         //sv.setType(nonempSI, nonempT);
 
-        ws.scan(sv, 1,4);
+        ws.scan(sv, 1, 1);
 
         // Die if neighbor unknown or nucleus or membrane > 3
         if (((Unsigned) 0 != ws.getHits(nucleusSI)) || ((Unsigned) 3 < ws.getHits(membraneSI)))
@@ -149,114 +150,31 @@ element Nucleus
             spread(ws.getSiteNum(emptySI));
         }
 
-        // Loop through neighbors
-        Dist room[4];
-        Bool safe[4];
-        for(SiteNum site = 1; site <= 4; ++site)
+        // Excite Cytoplasm and check room
+        Dist roomDiff = 0;
+        SiteNum site;
+        if((Unsigned) 0 != ws.getHits(cytoSI))
         {
-            Atom a = ew[site];
-            // If cytoplasm, excite
-            if(a is Cytoplasm)
+            site = ws.getSiteNum(cytoSI);
+            Cytoplasm c = (Cytoplasm) ew[site];
+            Dist room = 0;//c.room;
+            if(room > lastRoom)
             {
-                safe[site - 1] = true;
-                Cytoplasm c = (Cytoplasm) a;
-                excite(site, c);
-                if(site == 1)
-                {
-                    room[3] = c.room[3];
-                }
-                else if(site == 2)
-                {
-                    room[2] = c.room[2];
-                }
-                else if(site == 3)
-                {
-                    room[1] = c.room[1];
-                }
-                // Site == 4
-                else
-                {
-                    room[0] = c.room[0];
-                }
+                roomDiff = (Dist) (room - lastRoom);
             }
+            lastRoom = room;
+            excite(site, c);
         }
 
-        // Move to optimize room
-        Int udDisp = ((Int) room[2]) - ((Int) room[1]);
-        Int lrDisp = ((Int) room[3]) - ((Int) room[0]);
-
-        Dist udAbs;
-        if(udDisp < 0)
+        // Move
+        if(roomDiff > 2)
         {
-            udAbs = (Dist) -udDisp;
-        }
-        else
-        {
-            udAbs = (Dist) udDisp;
-        }
-
-        Dist lrAbs;
-        if(lrDisp < 0)
-        {
-            lrAbs =  (Dist) -lrDisp;
-        }
-        else
-        {
-            lrAbs = (Dist) lrDisp;
-        }
-
-        Bool isLarge = (udAbs > 2) || (lrAbs > 2);
-
-        // Move left/right
-        if(isLarge && (udAbs < lrAbs))
-        {
-            // Move right
-            if(lrDisp > 0)
-            {
-                if(safe[3])
-                {
-                    ew.swap(0, 4);
-                    return;
-                }
-
-            }
-            // Move left
-            else
-            {
-                if(safe[0])
-                {
-                    ew.swap(0, 1);
-                    return;
-                }
-            }
             --stabCount;
             stable = false;
+            //ew.swap(0, site);
+            return;
         }
-        // Move up/down
-        else if(isLarge)
-        {
-            // Move Down
-            if(udDisp > 0)
-            {
-                if(safe[2])
-                {
-                    ew.swap(0, 3);
-                    return;
-                }
-            }
-            // Move Up
-            else
-            {
-                if(safe[1])
-                {
-                    ew.swap(0, 2);
-                    return;
-                }
-            }
-            --stabCount;
-            stable = false;
-        }
-        // Count stable cycles
+        // Else count stable cycles
         else
         {
             if(stabCount > stableMinCycle)
