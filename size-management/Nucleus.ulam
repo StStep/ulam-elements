@@ -27,6 +27,8 @@ element Nucleus
     // Model Parameters
     /** Determines the size */
     parameter Dist maxDist = 16;
+    /** Determines the chain length */
+    parameter Dist chainLen = 16;
     /** Determines the cycles to be stable */
     parameter Unsigned(6) stableMinCycle = 30;
 
@@ -35,8 +37,9 @@ element Nucleus
     Inst iId = 0; // Instance ID, unique per instance
 
     Once mOnce;
-    Bool stable;
-    Unsigned(6) stabCount;
+    Bool stable = false;
+    Unsigned(6) stabCount = 0;
+    Bool isChain = false;
 
     /**
      * Hard-coded color options for debugging with
@@ -61,6 +64,16 @@ element Nucleus
     {
         Empty e;
         ew[0] = e;
+    }
+
+    Void spawnLink(SiteNum site)
+    {
+        if (nId == 1)
+            return;
+        Nucleus n;
+        n.nId = nId;
+        n.iId = (Inst) (iId - 1);
+        ew[site] = n;
     }
 
     Void spread(SiteNum site)
@@ -99,6 +112,10 @@ element Nucleus
         Unsigned(3) memNeig = 0;
         Dist room[4];
         Bool safe[4];
+        Bool seeChild = false;
+        Bool seeParent = false;
+        SiteNum parentDir = 0;
+        Value parentDist = 0;
         for(SiteNum site = 1; site <= 4; ++site)
         {
             // If Empty or Medium, spread
@@ -112,7 +129,24 @@ element Nucleus
             {
                 safe[site - 1] = true;
                 Cytoplasm c = (Cytoplasm) a;
-                excite(site, c);
+
+                // Check for parent
+                Value pd = c.instMap.getV((Key)(iId + 1));
+                if(parentDist < pd)
+                {
+                    seeParent = true;
+                    parentDist = pd;
+                    parentDir = site;
+                }
+
+                // Check for child if iId > 1
+                if(nId > 1) {
+                    Value cd = c.instMap.getV((Key)(iId - 1));
+                    if(cd != 0) {
+                        seeChild = true;
+                    }
+                }
+
                 if(site == 1)
                 {
                     room[3] = c.room[3];
@@ -130,6 +164,7 @@ element Nucleus
                 {
                     room[0] = c.room[0];
                 }
+                excite(site, c);
             }
             // Count surrounding membranes
             else if(a is Membrane)
@@ -150,11 +185,41 @@ element Nucleus
             }
         }
 
-        // Die if surrounded by membrane
-        if(memNeig > 3)
+        // Die if surrounded by membrane or no parent and is link
+        if((memNeig > 3) || (isChain && !seeParent))
         {
             die();
             return;
+        }
+
+        // Calculate if link
+        if(isChain) {
+            // Spawn if child not found and iId > 1, opposite dir of parent
+            if(!seeChild && iId > 1)
+            {
+                SiteNum childDir = 0;
+                if(parentDir == 1) {
+                    childDir = 3;
+                }
+                else if(parentDir == 2) {
+                    childDir = 4;
+                }
+                else if(parentDir == 3) {
+                    childDir = 1;
+                }
+                else {
+                    childDir = 2;
+                }
+                spawnLink(childDir);
+            }
+
+            // Move toward parent if out of range
+            Value calcRange = (Value) Value.maxof;
+            calcRange = (Value) (calcRange - parentDist);
+            if(calcRange > maxDist/2) {
+                ew.swap(0, parentDir);
+                return;
+            }
         }
 
         // Move to optimize room
