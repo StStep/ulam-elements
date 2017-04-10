@@ -32,6 +32,8 @@ element Nucleus
     parameter Dist maxDist = 16;
     /** Determines the cycles to be stable */
     parameter Unsigned(6) stableMinCycle = 30;
+    /** Determines the stability deadzone radius */
+    parameter Unsigned(6) stableDeadZoneR = 4;
 
     // Data members
     ID nId = 1; // Nucleus ID, unique per type
@@ -176,16 +178,16 @@ element Nucleus
                 room = c.room[0];
             }
 
-            if(room > lastRoom)
+            if(lastRoom > room)
             {
-                roomDiff = (Dist) (room - lastRoom);
+                roomDiff = (Dist) (lastRoom - room);
             }
             lastRoom = room;
             excite(site, c);
         }
 
         // Move
-        if(roomDiff > 2)
+        if(roomDiff > stableDeadZoneR )
         {
             --stabCount;
             stable = false;
