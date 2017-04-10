@@ -27,8 +27,6 @@ element Nucleus
     // Model Parameters
     /** Determines the size */
     parameter Dist maxDist = 16;
-    /** Determines the chain length */
-    parameter Dist chainLen = 16;
     /** Determines the cycles to be stable */
     parameter Unsigned(6) stableMinCycle = 30;
 
@@ -40,6 +38,7 @@ element Nucleus
     Bool stable = false;
     Unsigned(6) stabCount = 0;
     Bool isChain = false;
+    Bool isBase = false;
 
     /**
      * Hard-coded color options for debugging with
@@ -73,6 +72,7 @@ element Nucleus
         Nucleus n;
         n.nId = nId;
         n.iId = (Inst) (iId - 1);
+        n.isChain = true;
         ew[site] = n;
     }
 
@@ -105,7 +105,9 @@ element Nucleus
         // Run Once
         if(mOnce.new())
         {
-            iId = (Inst) rand.between(0,Inst.maxof);
+            if(iId == 0) {
+                iId = (Inst) rand.between(0,Inst.maxof);
+            }
         }
 
         // Loop through neighbors
@@ -171,11 +173,10 @@ element Nucleus
             {
                 ++memNeig;
             }
-            // Die if adjacent nuclei
+            // Do nothing for adjacent Nuclei
             else if(a is Nucleus)
             {
-                die();
-                return;
+                ;
             }
             // Else die if unknown
             else
@@ -186,7 +187,7 @@ element Nucleus
         }
 
         // Die if surrounded by membrane or no parent and is link
-        if((memNeig > 3) || (isChain && !seeParent))
+        if((memNeig > 3) || (isChain && !isBase && !seeParent))
         {
             die();
             return;
@@ -310,6 +311,34 @@ element Nucleus
                 stable = false;
             }
         }
+    }
+}
+
+/**
+ * Nucleus chain link enabler
+ * \color #2f2
+ * \symbol Nu
+ * \symmetries normal
+ *
+ * \author R. Stephens Summerlin
+ * \license lgpl
+ */
+element NucleusChain
+{
+    // Utilities
+    EventWindow ew;
+    typedef Nucleus.Inst Inst;
+
+    /**
+     * Primary runtime logic
+     */
+    Void behave()
+    {
+        Nucleus n;
+        n.iId = (Inst) 16;
+        n.isChain = true;
+        n.isBase = true;
+        ew[0] = n;
     }
 }
 
