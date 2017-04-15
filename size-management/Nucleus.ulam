@@ -9,8 +9,7 @@ use Once;
  * \author R. Stephens Summerlin
  * \license lgpl
  */
-element Nucleus
-{
+element Nucleus {
     // Types
     typedef Unsigned(6) ID;
     typedef Unsigned(4) Inst;
@@ -41,30 +40,25 @@ element Nucleus
     /**
      * Hard-coded color options for debugging with
      */
-    ARGB getColor(Unsigned selector)
-    {
+    ARGB getColor(Unsigned selector) {
         ColorUtils cu;
         ARGB ret;
-        if(stable)
-        {
+        if(stable) {
             ret = cu.color(0xFF,0x50,0xFF);
         }
-        else // unstable
-        {
+        else { // unstable
             ret = cu.color(0xFF,2,0x50);
         }
 
         return ret;
     }
 
-    Void die()
-    {
+    Void die() {
         Empty e;
         ew[0] = e;
     }
 
-    Void spread(SiteNum site)
-    {
+    Void spread(SiteNum site) {
         Cytoplasm c;
         c.nId = nId;
         c.iId = iId;
@@ -74,8 +68,7 @@ element Nucleus
         ew[site] = c;
     }
 
-    Void excite(SiteNum site, Cytoplasm c)
-    {
+    Void excite(SiteNum site, Cytoplasm c) {
         c.nId = nId;
         c.iId = iId;
         c.dist = maxDist;
@@ -87,11 +80,9 @@ element Nucleus
     /**
      * Primary runtime logic
      */
-    Void behave()
-    {
+    Void behave() {
         // Run Once
-        if(mOnce.new())
-        {
+        if(mOnce.new()) {
             iId = (Inst) rand.between(0,Inst.maxof);
         }
 
@@ -99,60 +90,49 @@ element Nucleus
         Unsigned(3) memNeig = 0;
         Dist room[4];
         Bool safe[4];
-        for(SiteNum site = 1; site <= 4; ++site)
-        {
+        for(SiteNum site = 1; site <= 4; ++site) {
             // If Empty or Medium, spread
             Atom a = ew[site];
-            if((a is Empty) || (a is Medium))
-            {
+            if((a is Empty) || (a is Medium)) {
                 spread(site);
             }
             // If cytoplasm, excite
-            else if(a is Cytoplasm)
-            {
+            else if(a is Cytoplasm) {
                 safe[site - 1] = true;
                 Cytoplasm c = (Cytoplasm) a;
                 excite(site, c);
-                if(site == 1)
-                {
+                if(site == 1) {
                     room[3] = c.room[3];
                 }
-                else if(site == 2)
-                {
+                else if(site == 2) {
                     room[2] = c.room[2];
                 }
-                else if(site == 3)
-                {
+                else if(site == 3) {
                     room[1] = c.room[1];
                 }
                 // Site == 4
-                else
-                {
+                else {
                     room[0] = c.room[0];
                 }
             }
             // Count surrounding membranes
-            else if(a is Membrane)
-            {
+            else if(a is Membrane) {
                 ++memNeig;
             }
             // Die if adjacent nuclei
-            else if(a is Nucleus)
-            {
+            else if(a is Nucleus) {
                 die();
                 return;
             }
             // Else die if unknown
-            else
-            {
+            else {
                die();
                return;
             }
         }
 
         // Die if surrounded by membrane
-        if(memNeig > 3)
-        {
+        if(memNeig > 3) {
             die();
             return;
         }
@@ -162,85 +142,68 @@ element Nucleus
         Int lrDisp = ((Int) room[3]) - ((Int) room[0]);
 
         Dist udAbs;
-        if(udDisp < 0)
-        {
+        if(udDisp < 0) {
             udAbs = (Dist) -udDisp;
         }
-        else
-        {
+        else {
             udAbs = (Dist) udDisp;
         }
 
         Dist lrAbs;
-        if(lrDisp < 0)
-        {
+        if(lrDisp < 0) {
             lrAbs =  (Dist) -lrDisp;
         }
-        else
-        {
+        else {
             lrAbs = (Dist) lrDisp;
         }
 
         Bool isLarge = (udAbs > 2) || (lrAbs > 2);
 
         // Move left/right
-        if(isLarge && (udAbs < lrAbs))
-        {
+        if(isLarge && (udAbs < lrAbs)) {
             --stabCount;
             stable = false;
             // Move right
-            if(lrDisp > 0)
-            {
-                if(safe[3])
-                {
+            if(lrDisp > 0) {
+                if(safe[3]) {
                     ew.swap(0, 4);
                     return;
                 }
 
             }
             // Move left
-            else
-            {
-                if(safe[0])
-                {
+            else {
+                if(safe[0]) {
                     ew.swap(0, 1);
                     return;
                 }
             }
         }
         // Move up/down
-        else if(isLarge)
-        {
+        else if(isLarge) {
             --stabCount;
             stable = false;
             // Move Down
-            if(udDisp > 0)
-            {
-                if(safe[2])
-                {
+            if(udDisp > 0) {
+                if(safe[2]) {
                     ew.swap(0, 3);
                     return;
                 }
             }
             // Move Up
-            else
-            {
-                if(safe[1])
-                {
+            else {
+                if(safe[1]) {
                     ew.swap(0, 2);
                     return;
                 }
             }
         }
         // Count stable cycles
-        else
-        {
-            if(stabCount > stableMinCycle)
-            {
+        else {
+            if(stabCount > stableMinCycle) {
                 stable = true;
             }
-            else
-            {
+            else {
                 ++stabCount;
                 stable = false;
             }
@@ -257,16 +220,14 @@ element Nucleus
  * \author R. Stephens Summerlin
  * \license lgpl
  */
-element NucleusB
-{
+element NucleusB {
     // Utilities
     EventWindow ew;
 
     /**
      * Primary runtime logic
      */
-    Void behave()
-    {
+    Void behave() {
         Nucleus n;
         n.nId = 2;
         ew[0] = n;
@@ -282,16 +243,14 @@ element NucleusB
  * \author R. Stephens Summerlin
  * \license lgpl
  */
-element NucleusC
-{
+element NucleusC {
     // Utilities
     EventWindow ew;
 
     /**
      * Primary runtime logic
      */
-    Void behave()
-    {
+    Void behave() {
         Nucleus n;
         n.nId = 3;
         ew[0] = n;
