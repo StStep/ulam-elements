@@ -191,6 +191,11 @@
    A hierarchical loop, where a central loop has a controlled distribution of contents.
    This distribution is then propagated through adjoining loops, indirectly.
 
+*** Benefits
+    Higher throughput than a melange, more directed.
+    Encapsulation of functionality.
+    Protect information better?
+
 *** Organization Summary
 
 **** Organ
@@ -321,7 +326,19 @@
 
 **** TODO Implement Path Allocation
 
+** Melange Organ
+   Organs contain a mixture of operator elements. Much simpler structure than Hierarchical loop organization.
+   Operator elements organize themselves into stratification, move around depending upon if they have available
+   input elements.
 
+   Routing would be to an organ ID first than an operator.
+
+*** Benefits
+    Simple
+
+*** Inner Organization
+
+****  ????
 * Unsorted Notes
   A collection of miscellaneous unorganized notes.
 
