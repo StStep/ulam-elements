@@ -9,8 +9,7 @@ use Once;
  * \author R. Stephens Summerlin
  * \license lgpl
  */
-element Nucleus
-{
+element Nucleus {
     // Types
     typedef Unsigned(6) ID;
     typedef Unsigned(4) Inst;
@@ -47,30 +46,25 @@ element Nucleus
     /**
      * Hard-coded color options for debugging with
      */
-    ARGB getColor(Unsigned selector)
-    {
+    ARGB getColor(Unsigned selector) {
         ColorUtils cu;
         ARGB ret;
-        if(stable)
-        {
+        if(stable) {
             ret = cu.color(0xFF,0x50,0xFF);
         }
-        else // unstable
-        {
+        else { // unstable
             ret = cu.color(0xFF,2,0x50);
         }
 
         return ret;
     }
 
-    Void die()
-    {
+    Void die() {
         Empty e;
         ew[0] = e;
     }
 
-    Void spread(SiteNum site)
-    {
+    Void spread(SiteNum site) {
         Cytoplasm c;
         c.nId = nId;
         c.iId = iId;
@@ -80,8 +74,7 @@ element Nucleus
         ew[site] = c;
     }
 
-    Void excite(SiteNum site, Cytoplasm c)
-    {
+    Void excite(SiteNum site, Cytoplasm c) {
         c.nId = nId;
         c.iId = iId;
         c.dist = maxDist;
@@ -93,8 +86,7 @@ element Nucleus
     /**
      * Primary runtime logic
      */
-    Void behave()
-    {
+    Void behave() {
         WindowScanner ws;
         SiteVisitorByType sv; // TODO Make cyto focused class, can do more with it, less boilerplate
         Empty e;
@@ -119,8 +111,7 @@ element Nucleus
         //ElementType nonempT = (ElementType) ws.cNONEMPTY_SITES_HIT; // TODO Add support for unknowns
 
         // Run Once
-        if(mOnce.new())
-        {
+        if(mOnce.new()) {
             iId = (Inst) rand.between(0,Inst.maxof);
         }
 
@@ -141,29 +132,25 @@ element Nucleus
 
         // Die if neighbor nucleus or membrane > 3
         // TODO add unknown death
-        if (((Unsigned) 0 != ws.getHits(nucleusSI)) || ((Unsigned) 3 < ws.getHits(membraneSI)))
-        {
+        if (((Unsigned) 0 != ws.getHits(nucleusSI)) || ((Unsigned) 3 < ws.getHits(membraneSI))) {
             die();
             return;
         }
 
         // Spread to empty TODO Add Medium
-        if((Unsigned) 0 != ws.getHits(emptySI))
-        {
+        if((Unsigned) 0 != ws.getHits(emptySI)) {
             spread(ws.getSiteNum(emptySI));
         }
 
         // Excite Cytoplasm and check room
         Dist roomDiff = 0;
         SiteNum site;
-        if((Unsigned) 0 != ws.getHits(cytoSI))
-        {
+        if((Unsigned) 0 != ws.getHits(cytoSI)) {
             site = ws.getSiteNum(cytoSI);
             Cytoplasm c = (Cytoplasm) ew[site];
             Dist room = c.room;
 
-            if(lastRoom > room)
-            {
+            if(lastRoom > room) {
                 roomDiff = (Dist) (lastRoom - room);
             }
             lastRoom = room;
@@ -171,22 +158,18 @@ element Nucleus
         }
 
         // Move
-        if(roomDiff > stableDeadZoneR )
-        {
+        if(roomDiff > stableDeadZoneR ) {
             --stabCount;
             stable = false;
             ew.swap(0, site);
             return;
         }
         // Else count stable cycles
-        else
-        {
-            if(stabCount > stableMinCycle)
-            {
+        else {
+            if(stabCount > stableMinCycle) {
                 stable = true;
             }
-            else
-            {
+            else {
                 ++stabCount;
                 stable = false;
             }
@@ -203,16 +186,14 @@ element Nucleus
  * \author R. Stephens Summerlin
  * \license lgpl
  */
-element NucleusB
-{
+element NucleusB {
     // Utilities
     EventWindow ew;
 
     /**
      * Primary runtime logic
      */
-    Void behave()
-    {
+    Void behave() {
         Nucleus n;
         n.nId = 2;
         ew[0] = n;
@@ -228,16 +209,14 @@ element NucleusB
  * \author R. Stephens Summerlin
  * \license lgpl
  */
-element NucleusC
-{
+element NucleusC {
     // Utilities
     EventWindow ew;
 
     /**
      * Primary runtime logic
      */
-    Void behave()
-    {
+    Void behave() {
         Nucleus n;
         n.nId = 3;
         ew[0] = n;

@@ -2,8 +2,7 @@
  * A cytoplasm map  Space cost: 30 bits
  * \sa MapT
  */
-quark CMap : MapT(4, 6, 3)
-{
+quark CMap : MapT(4, 6, 3) {
     typedef MapT(4, 6, 3).Key Key;
     typedef MapT(4, 6, 3).Value Value;
 }
@@ -21,8 +20,7 @@ quark CMap : MapT(4, 6, 3)
  *
  */
 
-element Cytoplasm
-{
+element Cytoplasm {
     // Types
     typedef Nucleus.ID ID;
     typedef Nucleus.Inst Inst;
@@ -53,52 +51,43 @@ element Cytoplasm
      * Hard-coded color options for debugging with
      * ID 1, 2, and 3
      */
-    ARGB getColor(Unsigned selector)
-    {
+    ARGB getColor(Unsigned selector) {
         ColorUtils cu;
         ARGB ret;
-        if(nId == 1)
-        {
+        if(nId == 1) {
             ret = cu.color(2,2,0xFF);
         }
-        else if(nId == 2)
-        {
+        else if(nId == 2) {
             ret = cu.color(2,0x60,0xFF);
         }
-        else if(nId == 3)
-        {
+        else if(nId == 3) {
             ret = cu.color(0x30,2,0xFF);
         }
-        else // dead
-        {
+        else { // dead
             ret = cu.color(2,2,2);
         }
 
         return ret;
     }
 
-    Void harden()
-    {
+    Void harden() {
         Membrane m;
         m.instMap.empty();
         ew[0] = m;
     }
 
-    Void hardenOut(SiteNum site)
-    {
+    Void hardenOut(SiteNum site) {
         Membrane m;
         m.instMap.empty();
         ew[site] = m;
     }
 
-    Void die()
-    {
+    Void die() {
         Empty e;
         ew[0] = e;
     }
 
-    Void spread(SiteNum site)
-    {
+    Void spread(SiteNum site) {
         Cytoplasm c;
         c.nId = nId;
         c.iId = iId;
@@ -222,13 +211,11 @@ element Cytoplasm
         --room;
 
         // Die when dist less than death lim
-        if(maxDist < deadLim)
-        {
+        if(maxDist < deadLim) {
             die();
             return;
         }
-        else
-        {
+        else {
             dist = maxDist;
             instMap.setTo(tmpMap);
         }
