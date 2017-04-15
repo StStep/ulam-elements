@@ -28,9 +28,13 @@ element Cytoplasm
     typedef Nucleus.Inst Inst;
     typedef Nucleus.Dist Dist;
     typedef EventWindow.SiteNum SiteNum;
+    typedef EventWindow.Symmetry Symmetry;
+    typedef SiteVisitorByType.ElementType ElementType;
+    typedef WindowScanner.Category Category;
 
     // Utilities
     EventWindow ew;
+    AtomUtils au;
 
     // Model Parameters
     /** The weak thresh, no spreading */
@@ -42,7 +46,7 @@ element Cytoplasm
     ID nId; // 6 bits
     Inst iId; // 4 bits
     Dist dist; // The distance from the nucleus, 6 bits
-    Dist room[4]; // 6 * 4 = 24 bits
+    Dist room; // 6 bits
     CMap instMap; // 30 bits
 
     /**
@@ -107,122 +111,115 @@ element Cytoplasm
     /**
      * Primary runtime logic
      */
-    Void behave()
-    {
+    Void behave() {
+        WindowScanner ws;
+        SiteVisitorByType sv; // TODO Make cyto focused class, can do more with it, less boilerplate
+        Empty e;
+        Cytoplasm c;
+        Nucleus n;
+        Membrane m;
+        Medium me;
+        Wall w;
+
+        typedef WindowScanner.Category Category;
+        constant Category emptySI = 0;    // scan index for empties
+        constant Category cytoSI = 1;   // scan index for cytoplasm
+        constant Category mediumSI = 2;   // scan index for medium
+        constant Category membraneSI = 3;   // scan index for membrane
+        constant Category nucleusSI = 4;   // scan index for nucleus
+        constant Category nonempSI = 5;     // scan index for non-empty unknowns
+
+        ElementType emptyT = (ElementType) au.getType((Atom) e);
+        ElementType cytoT = (ElementType) au.getType((Atom) c);
+        ElementType mediumT = (ElementType) au.getType((Atom) me);
+        ElementType membraneT = (ElementType) au.getType((Atom) m);
+        ElementType nucleusT = (ElementType) au.getType((Atom) n);
+        ElementType nonempT = (ElementType) au.getType((Atom) w); // TODO Add support for unknowns
+
+        sv.reset();
+        sv.setType(emptySI, emptyT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(cytoSI, cytoT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(mediumSI, mediumT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(membraneSI, membraneT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(nucleusSI, nucleusT);
+        ws.allocateCategory(); // TODO Put this in sv
+        sv.setType(nonempSI, nonempT);
+        ws.allocateCategory(); // TODO Put this in sv
+
+        ws.scan(sv, 1, 1);
+
         // Setup temp map
         Dist maxDist = dist;
         CMap tmpMap;
+        SiteNum site;
         tmpMap.setTo(instMap);
 
-        // Loop through neighbors
-        for(SiteNum site = 1; site <= 4; ++site)
-        {
-            Atom a = ew[site];
-
-            // If friendly Cyto neigbor, calc maxDist dist, otherwise membrane
-            if(a is Cytoplasm)
-            {
-                Cytoplasm neig = (Cytoplasm) a;
-                if((neig.nId != nId) || (neig.iId != iId))
-                {
-                    harden();
-                    return;
-                }
-                else
-                {
-                    tmpMap.setMax(neig.instMap);
-
-                    if(neig.dist > maxDist)
-                    {
-                        maxDist = neig.dist;
-                    }
-
-                    if(site == 1)
-                    {
-                        if(neig.room[3] > room[3])
-                            room[3] = neig.room[3];
-                    }
-                    else if(site == 2)
-                    {
-                        if(neig.room[2] > room[2])
-                            room[2] = neig.room[2];
-                    }
-                    else if(site == 3)
-                    {
-                        if(neig.room[1] > room[1])
-                            room[1] = neig.room[1];
-                    }
-                    // Site == 4
-                    else
-                    {
-                        if(neig.room[0] > room[0])
-                            room[0] = neig.room[0];
-                    }
-                }
+        // If friendly Cyto calc maxDist else harden
+        if((Unsigned) 0 != ws.getHits(cytoSI)) {
+            site = ws.getSiteNum(cytoSI);
+            Cytoplasm c = (Cytoplasm) ew[site];
+            if((c.nId != nId) || (c.iId != iId)) {
+                harden();
+                return;
             }
-            // If empty or Medium and not on distance edge, make cyto
-            else if((a is Empty) || (a is Medium))
-            {
-                if(dist > weakLim)
-                {
-                    spread(site);
-                }
-                else
-                {
-                    hardenOut(site);
-                }
-            }
-            // If membrane, calc room
-            else if(a is Membrane)
-            {
-                Membrane neig = (Membrane) a;
-                if(site == 1)
-                {
-                    room[3] = Dist.maxof;
-                }
-                else if(site == 2)
-                {
-                    room[2] = Dist.maxof;
-                }
-                else if(site == 3)
-                {
-                    room[1] = Dist.maxof;
-                }
-                // Site == 4
-                else
-                {
-                    room[0] = Dist.maxof;
+            else {
+                tmpMap.setMax(c.instMap);
+
+                if(c.dist > maxDist) {
+                    maxDist = c.dist;
                 }
 
-                if(neig.trans)
-                {
-                    tmpMap.setMax(neig.instMap);
+                if(c.room > room) {
+                    room = c.room;
                 }
             }
-            else if(a is Nucleus)
-            {
-                Nucleus neig = (Nucleus) a;
-                if((neig.nId != nId) || (neig.iId != iId))
-                {
-                    harden();
-                    return;
-                }
+        }
+
+        // If Membrane set room and check instMap if trans
+        if((Unsigned) 0 != ws.getHits(membraneSI)) {
+            room = Dist.maxof;
+            site = ws.getSiteNum(membraneSI);
+            Membrane m = (Membrane) ew[site];
+            if(m.trans) {
+                tmpMap.setMax(m.instMap);
             }
-            // Else become membrane if unknown
-            else
-            {
+        }
+
+        // If Nucleus, check IDs to see if harden
+        if((Unsigned) 0 != ws.getHits(nucleusSI)) {
+            site = ws.getSiteNum(nucleusSI);
+            Nucleus n = (Nucleus) ew[site];
+            if((n.nId != nId) || (n.iId != iId)) {
                 harden();
                 return;
             }
         }
 
+        // If empty or medium, spread TODO add medium detection
+        if((Unsigned) 0 != ws.getHits(emptySI)) {
+            site = ws.getSiteNum(emptySI);
+            if(dist > weakLim) {
+                spread(site);
+            }
+            else {
+                hardenOut(site);
+            }
+        }
+
+        // Harden if unknown
+        if((Unsigned) 0 != ws.getHits(nonempSI)) {
+            harden();
+            return;
+        }
+
         // Decay and set
         tmpMap.modify(-1);
         --maxDist;
-        for(Int i = 0; i < 4; ++i)
-        {
-            --room[i];
-        }
+        --room;
 
         // Die when dist less than death lim
         if(maxDist < deadLim)

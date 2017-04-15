@@ -139,7 +139,8 @@ element Nucleus
 
         ws.scan(sv, 1, 1);
 
-        // Die if neighbor unknown or nucleus or membrane > 3
+        // Die if neighbor nucleus or membrane > 3
+        // TODO add unknown death
         if (((Unsigned) 0 != ws.getHits(nucleusSI)) || ((Unsigned) 3 < ws.getHits(membraneSI)))
         {
             die();
@@ -159,24 +160,7 @@ element Nucleus
         {
             site = ws.getSiteNum(cytoSI);
             Cytoplasm c = (Cytoplasm) ew[site];
-            Dist room = 0;//c.room;
-            if(site == 1)
-            {
-                room = c.room[3];
-            }
-            else if(site == 2)
-            {
-                room = c.room[2];
-            }
-            else if(site == 3)
-            {
-                room = c.room[1];
-            }
-            // Site == 4
-            else
-            {
-                room = c.room[0];
-            }
+            Dist room = c.room;
 
             if(lastRoom > room)
             {

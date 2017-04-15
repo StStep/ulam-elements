@@ -337,6 +337,8 @@
     Simple
 
 *** Inner Organization
+    Should only move when seeing data?
+    Try to organize based on certain ideas?
 
 ****  ????
 * Unsorted Notes
