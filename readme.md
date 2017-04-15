@@ -11,6 +11,11 @@ as an alternative to checking every neighbor. This method is preferable for nati
 since I hope to port this project at some point to a simple HW implementation, I have been avoiding using a lot
 of the less-obvious ULAM functionality.
 
+Making the Nucleus statistical seems to have had little affect on the allocation.
+
+Making the cytoplasm statistical seems to have removed the rigidity of the allocated space. Making it only
+well-defined when it has a surrounding structure. This might make it less useful overall.
+
 Documentation
 --
 
