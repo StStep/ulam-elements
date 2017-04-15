@@ -9,8 +9,7 @@
  * \license lgpl
  *
  */
-element Membrane
-{
+element Membrane {
 
     // Types
     typedef Nucleus.ID ID;
@@ -35,30 +34,25 @@ element Membrane
      * Hard-coded color options for debugging with
      * trans and not trans
      */
-    ARGB getColor(Unsigned selector)
-    {
+    ARGB getColor(Unsigned selector) {
         ColorUtils cu;
         ARGB ret;
-        if(trans)
-        {
+        if(trans) {
             ret = cu.color(0xA0,0xA0,0);
         }
-        else
-        {
+        else {
             ret = cu.color(0xFF,0,0);
         }
 
         return ret;
     }
 
-    Void die()
-    {
+    Void die() {
         Empty e;
         ew[0] = e;
     }
 
-    Void dissolve(ID nId, Inst iId)
-    {
+    Void dissolve(ID nId, Inst iId) {
         Cytoplasm c;
         c.nId = nId;
         c.iId = iId;
@@ -70,8 +64,7 @@ element Membrane
     /**
      * Primary runtime logic
      */
-    Void behave()
-    {
+    Void behave() {
         // Loop through neighbors
         Bool goodNeig = false;
         Bool iTrans = false;
@@ -88,127 +81,104 @@ element Membrane
         Unsigned(3) goodCnt = 0;
         CMap tmpMap; // 30 bits
         tmpMap.setTo(instMap);
-        for(SiteNum site = 1; site <= 4; ++site)
-        {
+        for(SiteNum site = 1; site <= 4; ++site) {
             Atom a = ew[site];
 
             // Check for weak neighbors and contention
-            if(a is Cytoplasm)
-            {
+            if(a is Cytoplasm) {
                 Cytoplasm neig = (Cytoplasm) a;
                 goodNeig = true;
                 ++goodCnt;
 
                 // Check for weak cyto neig
-                if(neig.dist <= weakLim)
-                {
+                if(neig.dist <= weakLim) {
                     weakFriend = true;
                 }
 
                 // Check for contention
-                if(lastId == 0)
-                {
+                if(lastId == 0) {
                     lastId = neig.nId;
                     lastiId = neig.iId;
                     tmpMap.setMax(neig.instMap);
                 }
-                else if(lastId != neig.nId)
-                {
+                else if(lastId != neig.nId) {
                     contention = true;
                     unfriendlyContention = true;
                 }
-                else if(lastiId != neig.iId)
-                {
+                else if(lastiId != neig.iId) {
                     iTrans = true;
                     contention = true;
                     tmpMap.setMax(neig.instMap);
                 }
-                else
-                {
+                else {
                     // Do nothing
                 }
 
                 // Determine moveDir, for contention
-                if(neig.dist < minDist)
-                {
+                if(neig.dist < minDist) {
                     minDist = neig.dist;
                     minLoc = site;
                 }
 
                 // Determine moveDir, for contention
-                if(neig.dist > maxDist)
-                {
+                if(neig.dist > maxDist) {
                     maxDist = neig.dist;
                 }
             }
-            else if((a is Empty) || (a is Medium))
-            {
+            else if((a is Empty) || (a is Medium)) {
                 // Do nothing
                 neutral = true;
             }
-            else if(a is Membrane)
-            {
+            else if(a is Membrane) {
                 // Do nothing
             }
-            else if(a is Nucleus)
-            {
+            else if(a is Nucleus) {
                 // Do nothing
             }
-            else
-            {
+            else {
                 unknown = true;
             }
         }
 
         trans = false;
         // Die if no cyto
-        if(!goodNeig)
-        {
+        if(!goodNeig) {
             die();
             return;
         }
         // Else if unknown stay
-        else if(unknown)
-        {
+        else if(unknown) {
             // Stay put
         }
         // Else if, contention might move
-        else if(contention)
-        {
+        else if(contention) {
             Dist distDiff = (Dist) (maxDist - minDist);
-            if(distDiff <= conFlex)
-            {
+            if(distDiff <= conFlex) {
                 // Do nothing
             }
-            else
-            {
+            else {
                 ew[minLoc] = self;
                 die();
                 return;
             }
 
-            if(!unfriendlyContention)
-            {
+            if(!unfriendlyContention) {
                 trans = iTrans;
             }
         }
         // Else dissolve if all strong friends and no nuetral or surrounded by friends
-        else if(!neutral || !weakFriend || (goodCnt >= 3))
-        {
+        else if(!neutral || !weakFriend || (goodCnt >= 3)) {
             dissolve(lastId, lastiId);
             return;
         }
-        else
-        {
+        else {
             // Do nothing
         }
 
-        if(trans)
-        {
+        if(trans) {
             tmpMap.modify(-1);
         }
-        else
-        {
+        else {
             tmpMap.empty();
         }
         instMap.setTo(tmpMap);
